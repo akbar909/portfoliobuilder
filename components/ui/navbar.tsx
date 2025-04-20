@@ -1,0 +1,156 @@
+"use client"
+
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useSession, signOut } from "next-auth/react"
+import { Menu, X } from "lucide-react"
+import { useState } from "react"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+export function Navbar() {
+  const { data: session } = useSession()
+  const pathname = usePathname()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
+  const isDashboard = pathname.startsWith("/dashboard")
+
+  return (
+    <nav className="border-b bg-background">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+        <div className="flex items-center">
+          <Link href="/" className="text-xl font-bold">
+            PortfolioBuilder
+          </Link>
+        </div>
+
+        {/* Desktop Navigation */}
+        <div className="hidden items-center gap-6 md:flex">
+          <Link href="/" className={`text-sm ${pathname === "/" ? "font-medium" : "text-muted-foreground"}`}>
+            Home
+          </Link>
+
+          {session ? (
+            <>
+              <Link href="/dashboard" className={`text-sm ${isDashboard ? "font-medium" : "text-muted-foreground"}`}>
+                Dashboard
+              </Link>
+              <Link href={`/${session.user.username}`} className="text-sm text-muted-foreground" target="_blank">
+                View Portfolio
+              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <span className="sr-only">Open user menu</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      {session.user.name?.[0] || "U"}
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard">Dashboard</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/settings">Settings</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => signOut()}>Log out</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          ) : (
+            <>
+              <Link href="/auth/signin" className="text-sm text-muted-foreground">
+                Sign In
+              </Link>
+              <Link href="/auth/signup">
+                <Button>Sign Up</Button>
+              </Link>
+            </>
+          )}
+          <ThemeToggle />
+        </div>
+
+        {/* Mobile Navigation Toggle */}
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <Button variant="ghost" size="icon" onClick={toggleMenu}>
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
+        </div>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      {isMenuOpen && (
+        <div className="border-t px-4 py-3 md:hidden">
+          <div className="flex flex-col space-y-3">
+            <Link
+              href="/"
+              className={`text-sm ${pathname === "/" ? "font-medium" : "text-muted-foreground"}`}
+              onClick={toggleMenu}
+            >
+              Home
+            </Link>
+
+            {session ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  className={`text-sm ${isDashboard ? "font-medium" : "text-muted-foreground"}`}
+                  onClick={toggleMenu}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href={`/${session.user.username}`}
+                  className="text-sm text-muted-foreground"
+                  target="_blank"
+                  onClick={toggleMenu}
+                >
+                  View Portfolio
+                </Link>
+                <Link href="/dashboard/settings" className="text-sm text-muted-foreground" onClick={toggleMenu}>
+                  Settings
+                </Link>
+                <Button
+                  variant="ghost"
+                  className="justify-start px-0 text-sm text-muted-foreground"
+                  onClick={() => {
+                    signOut()
+                    toggleMenu()
+                  }}
+                >
+                  Log out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link href="/auth/signin" className="text-sm text-muted-foreground" onClick={toggleMenu}>
+                  Sign In
+                </Link>
+                <Link href="/auth/signup" className="text-sm text-muted-foreground" onClick={toggleMenu}>
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </nav>
+  )
+}
