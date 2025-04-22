@@ -94,7 +94,7 @@ export default function SignUp() {
               <Input
                 id="name"
                 name="name"
-                placeholder="John Doe"
+                placeholder="Enter Name"
                 required
                 value={formData.name}
                 onChange={handleChange}
@@ -106,7 +106,7 @@ export default function SignUp() {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="Enter Email"
                 required
                 value={formData.email}
                 onChange={handleChange}
@@ -117,7 +117,7 @@ export default function SignUp() {
               <Input
                 id="username"
                 name="username"
-                placeholder="johndoe"
+                placeholder="username"
                 required
                 value={formData.username}
                 onChange={handleChange}
