@@ -2,14 +2,14 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { toast } from "@/components/ui/use-toast"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
 
 export default function SignUp() {
   const router = useRouter()
@@ -33,11 +33,7 @@ export default function SignUp() {
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      toast({
-        title: "Error",
-        description: "Passwords do not match",
-        variant: "destructive",
-      })
+      toast.error("Passwords do not match")
       setIsLoading(false)
       return
     }
@@ -59,22 +55,20 @@ export default function SignUp() {
       const data = await res.json()
 
       if (!res.ok) {
-        throw new Error(data.error || "Failed to register")
+        if (data.error && (data.error.includes("email") || data.error.includes("username"))) {
+          toast.error(data.error)
+        } else {
+          toast.error("Failed to register")
+        }
+        setIsLoading(false)
+        return
       }
 
-      toast({
-        title: "Success",
-        description: "Account created successfully. Please sign in.",
-      })
-
+      toast.success("Account created successfully. Please sign in.")
       router.push("/auth/signin")
     } catch (error: any) {
       console.error("Registration error:", error)
-      toast({
-        title: "Error",
-        description: error.message || "Failed to create account",
-        variant: "destructive",
-      })
+      toast.error(error.message || "Failed to create account")
     } finally {
       setIsLoading(false)
     }

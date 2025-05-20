@@ -1,17 +1,18 @@
-import { getServerSession } from "next-auth/next"
-import { redirect } from "next/navigation"
-import Link from "next/link"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { AboutForm } from "@/components/dashboard/about-form"
+import { ContactForm } from "@/components/dashboard/contact-form"
+import DashboardProfileMenu from "@/components/dashboard/DashboardProfileMenu"
+import { HeroForm } from "@/components/dashboard/hero-form"
+import { ProjectForm } from "@/components/dashboard/project-form"
+import { ThemeForm } from "@/components/dashboard/theme-form"
+import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import connectDB from "@/lib/db"
 import Portfolio from "@/models/Portfolio"
-import { HeroForm } from "@/components/dashboard/hero-form"
-import { ThemeForm } from "@/components/dashboard/theme-form"
-import { AboutForm } from "@/components/dashboard/about-form"
-import { ProjectForm } from "@/components/dashboard/project-form"
-import { ContactForm } from "@/components/dashboard/contact-form"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
 import { ExternalLink } from "lucide-react"
+import { getServerSession } from "next-auth/next"
+import Link from "next/link"
+import { redirect } from "next/navigation"
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions)
@@ -38,12 +39,16 @@ export default async function Dashboard() {
       <div className="container py-8">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-bold">Dashboard</h1>
-          <Link href={`/${session.user.username}`} target="_blank">
-            <Button variant="outline" className="flex items-center gap-2">
-              <ExternalLink className="h-4 w-4" />
-              View Portfolio
-            </Button>
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href={`/${session.user.username}`} target="_blank">
+              <Button variant="outline" className="flex items-center gap-2">
+                <ExternalLink className="h-4 w-4" />
+                View Portfolio
+              </Button>
+            </Link>
+            {/* Profile Button Dropdown */}
+            <DashboardProfileMenu />
+          </div>
         </div>
 
         <Tabs defaultValue="hero" className="w-full">

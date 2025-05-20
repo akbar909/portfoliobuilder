@@ -2,17 +2,17 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Image from "next/image"
-import { ImagePlus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { toast } from "@/components/ui/use-toast"
+import { Textarea } from "@/components/ui/textarea"
+import { ImagePlus, Trash2 } from "lucide-react"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
 
 interface HeroFormProps {
   portfolio: {
@@ -88,19 +88,12 @@ export function HeroForm({ portfolio }: HeroFormProps) {
         throw new Error("Failed to update portfolio")
       }
 
-      toast({
-        title: "Success",
-        description: "Your hero section has been updated.",
-      })
+      toast.success("Your hero section has been updated.")
 
       router.refresh()
     } catch (error) {
       console.error("Error updating hero section:", error)
-      toast({
-        title: "Error",
-        description: "Failed to update hero section. Please try again.",
-        variant: "destructive",
-      })
+      toast.error("Failed to update hero section. Please try again.")
     } finally {
       setIsLoading(false)
     }

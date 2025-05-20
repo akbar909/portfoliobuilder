@@ -2,14 +2,14 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Mail, Linkedin, Github, Twitter } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { toast } from "@/components/ui/use-toast"
+import { Github, Linkedin, Mail, Twitter } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
 
 interface ContactFormProps {
   portfolio: {
@@ -32,6 +32,23 @@ export function ContactForm({ portfolio }: ContactFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    // Validation: Email required
+    if (!email) {
+      toast.error("Email is required.")
+      return
+    }
+    if (!linkedin) {
+      toast.error("LinkedIn profile is required.")
+      return
+    }
+    if (!github) {
+      toast.error("GitHub profile is required.")
+      return
+    }
+    if (!twitter) {
+      toast.error("Twitter/X profile is required.")
+      return
+    }
     setIsLoading(true)
 
     try {
@@ -55,19 +72,12 @@ export function ContactForm({ portfolio }: ContactFormProps) {
         throw new Error("Failed to update contact information")
       }
 
-      toast({
-        title: "Success",
-        description: "Your contact information has been updated.",
-      })
+      toast.success("Your contact information has been updated.")
 
       router.refresh()
     } catch (error) {
       console.error("Error updating contact information:", error)
-      toast({
-        title: "Error",
-        description: "Failed to update contact information. Please try again.",
-        variant: "destructive",
-      })
+      toast.error("Failed to update contact information. Please try again.")
     } finally {
       setIsLoading(false)
     }

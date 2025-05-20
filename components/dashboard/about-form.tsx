@@ -1,15 +1,15 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import Image from "next/image"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Trash2, ImagePlus } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
+import { ImagePlus, Trash2 } from "lucide-react"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
 
 interface AboutFormProps {
   portfolio: any
@@ -90,6 +90,34 @@ export function AboutForm({ portfolio }: AboutFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    // Validation: Profile image required
+    if (!aboutTitle) {
+      toast.error("About Title Required. Please write a about title.")
+      return
+    }
+    if (!aboutLocation) {
+      toast.error("Location Required. Please write a location.")
+      return
+    }
+    if (!aboutDescription) {
+      toast.error("About Bio Required. Please write a bio.")
+      return
+    }
+    if (!aboutBio) {
+      toast.error("About Description Required. Please write a description")
+      return
+    }
+    // Validation: Each skill must have an image and a name
+    for (let i = 0; i < skills.length; i++) {
+      if (!skills[i].name.trim()) {
+        toast.error(`Skill Name Required. Please enter a name for skill #${i + 1}.`)
+        return
+      }
+      if (!skills[i].image) {
+        toast.error(`Skill Image Required. Please upload an image for skill #${i + 1}.`)
+        return
+      }
+    }
     setIsLoading(true)
 
     try {
@@ -126,19 +154,12 @@ export function AboutForm({ portfolio }: AboutFormProps) {
 
       if (!res.ok) throw new Error("Failed to update about section")
 
-      toast({
-        title: "Success",
-        description: "Your about section has been updated.",
-      })
+      toast.success("Your about section has been updated.")
 
       router.refresh()
     } catch (error) {
       console.error("Error updating about section:", error)
-      toast({
-        title: "Error",
-        description: "Failed to update about section. Please try again.",
-        variant: "destructive",
-      })
+      toast.error("Failed to update about section. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -172,25 +193,25 @@ export function AboutForm({ portfolio }: AboutFormProps) {
             />
           </div>
 
-          {/* Bio */}
+          {/* Description */}
           <div>
             <Label>Bio</Label>
             <Textarea
-              value={aboutBio}
-              onChange={(e) => setAboutBio(e.target.value)}
+              value={aboutDescription}
+              onChange={(e) => setAboutDescription(e.target.value)}
               placeholder="Write a short bio"
             />
           </div>
-
-          {/* Description */}
+          {/* Bio */}
           <div>
             <Label>Description</Label>
             <Textarea
-              value={aboutDescription}
-              onChange={(e) => setAboutDescription(e.target.value)}
+              value={aboutBio}
+              onChange={(e) => setAboutBio(e.target.value)}
               placeholder="Detailed description about you"
             />
           </div>
+
 
           {/* Profile Image */}
           <div>

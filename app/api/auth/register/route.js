@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server"
-import bcrypt from "bcryptjs"
 import connectDB from "@/lib/db"
-import User from "@/models/User"
 import Portfolio from "@/models/Portfolio"
+import User from "@/models/User"
+import bcrypt from "bcryptjs"
+import { NextResponse } from "next/server"
 
 export async function POST(request) {
   try {
@@ -10,13 +10,16 @@ export async function POST(request) {
 
     await connectDB()
 
-    // Check if user already exists
-    const existingUser = await User.findOne({
-      $or: [{ email }, { username }],
-    })
+    // Check if email already exists
+    const existingEmail = await User.findOne({ email })
+    if (existingEmail) {
+      return NextResponse.json({ error: "User with this email already exists" }, { status: 400 })
+    }
 
-    if (existingUser) {
-      return NextResponse.json({ error: "User with this email or username already exists" }, { status: 400 })
+    // Check if username already exists
+    const existingUsername = await User.findOne({ username })
+    if (existingUsername) {
+      return NextResponse.json({ error: "User with this username already exists" }, { status: 400 })
     }
 
     // Hash password

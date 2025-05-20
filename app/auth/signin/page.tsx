@@ -2,15 +2,15 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { toast } from "@/components/ui/use-toast"
+import { signIn } from "next-auth/react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
 
 export default function SignIn() {
   const router = useRouter()
@@ -29,6 +29,12 @@ export default function SignIn() {
     e.preventDefault()
     setIsLoading(true)
 
+    if (!formData.email || !formData.password) {
+      toast.error("Please enter both email and password.")
+      setIsLoading(false)
+      return
+    }
+
     try {
       const result = await signIn("credentials", {
         redirect: false,
@@ -37,23 +43,27 @@ export default function SignIn() {
       })
 
       if (result?.error) {
-        toast({
-          title: "Error",
-          description: result.error,
-          variant: "destructive",
-        })
+        let errorMsg = result.error || "Sign in failed."
+        if (errorMsg && typeof errorMsg === "string") {
+          if (errorMsg.includes("No user found")) {
+            errorMsg = "No account found with this email."
+          } else if (errorMsg.includes("Invalid password")) {
+            errorMsg = "Invalid password."
+          }
+        }
+        toast.error(errorMsg)
+        setIsLoading(false)
         return
       }
 
-      router.push("/dashboard")
-      router.refresh()
+      toast.success("Signed in successfully! Redirecting...")
+      setTimeout(() => {
+        router.push("/dashboard")
+        router.refresh()
+      }, 800)
     } catch (error) {
       console.error("Sign in error:", error)
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive",
-      })
+      toast.error("An unexpected error occurred. Please try again.")
     } finally {
       setIsLoading(false)
     }

@@ -2,13 +2,13 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { toast } from "@/components/ui/use-toast"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
 
 interface ThemeFormProps {
   portfolio: {
@@ -50,19 +50,12 @@ export function ThemeForm({ portfolio }: ThemeFormProps) {
         throw new Error("Failed to update theme")
       }
 
-      toast({
-        title: "Success",
-        description: "Your theme settings have been updated.",
-      })
+      toast.success("Your theme settings have been updated.")
 
       router.refresh()
     } catch (error) {
       console.error("Error updating theme:", error)
-      toast({
-        title: "Error",
-        description: "Failed to update theme settings. Please try again.",
-        variant: "destructive",
-      })
+      toast.error("Failed to update theme settings. Please try again.")
     } finally {
       setIsLoading(false)
     }

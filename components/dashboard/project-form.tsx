@@ -2,17 +2,8 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Image from "next/image"
-import { ImagePlus, Trash2, Plus, X, ExternalLink, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { toast } from "@/components/ui/use-toast"
 import {
   Dialog,
   DialogContent,
@@ -22,7 +13,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Textarea } from "@/components/ui/textarea"
+import { ExternalLink, Github, ImagePlus, Plus, Trash2, X } from "lucide-react"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
 
 interface Project {
   _id?: string
@@ -148,6 +148,7 @@ export function ProjectForm({ projects: initialProjects }: ProjectFormProps) {
       }
 
       let res
+      let updatedProjects: Project[] = []
 
       if (isEditing && currentProject._id) {
         // Update existing project
@@ -158,6 +159,11 @@ export function ProjectForm({ projects: initialProjects }: ProjectFormProps) {
           },
           body: JSON.stringify(projectData),
         })
+        if (!res.ok) throw new Error("Failed to update project")
+        const data = await res.json()
+        updatedProjects = projects.map((p) => (p._id === currentProject._id ? data.project : p))
+        setProjects(updatedProjects)
+        toast.success("Project updated successfully")
       } else {
         // Create new project
         res = await fetch("/api/portfolio/projects", {
@@ -167,30 +173,20 @@ export function ProjectForm({ projects: initialProjects }: ProjectFormProps) {
           },
           body: JSON.stringify(projectData),
         })
+        if (!res.ok) throw new Error("Failed to add project")
+        const data = await res.json()
+        updatedProjects = [...projects, data.project]
+        setProjects(updatedProjects)
+        toast.success("Project added successfully")
       }
-
-      if (!res.ok) {
-        throw new Error("Failed to save project")
-      }
-
-      const data = await res.json()
-
-      toast({
-        title: "Success",
-        description: isEditing ? "Project updated successfully" : "Project added successfully",
-      })
 
       // Close dialog and reset form
       setIsDialogOpen(false)
       resetForm()
       router.refresh()
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving project:", error)
-      toast({
-        title: "Error",
-        description: "Failed to save project. Please try again.",
-        variant: "destructive",
-      })
+      toast.error(error.message || "Failed to save project. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -212,19 +208,12 @@ export function ProjectForm({ projects: initialProjects }: ProjectFormProps) {
         throw new Error("Failed to delete project")
       }
 
-      toast({
-        title: "Success",
-        description: "Project deleted successfully",
-      })
-
+      setProjects(projects.filter((p) => p._id !== id))
+      toast.success("Project deleted successfully")
       router.refresh()
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting project:", error)
-      toast({
-        title: "Error",
-        description: "Failed to delete project. Please try again.",
-        variant: "destructive",
-      })
+      toast.error(error.message || "Failed to delete project. Please try again.")
     } finally {
       setIsLoading(false)
     }

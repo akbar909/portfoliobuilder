@@ -1,12 +1,12 @@
-import type React from "react"
-import { Inter } from "next/font/google"
-import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "@/components/ui/toaster"
-import "./globals.css"
 import { SessionProvider } from "@/components/session-provider"
+import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/sonner"
+import { getServerSession } from "next-auth/next"
+import { Inter } from "next/font/google"
+import type React from "react"
 import ClientLayout from "./ClientLayout"
+import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
