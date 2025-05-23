@@ -14,7 +14,7 @@ export default function Home() {
       <section className="w-full py-16 md:py-28 lg:py-36 bg-gradient-to-br from-primary/5 to-background relative overflow-hidden">
         <div className="container px-4 md:px-6 flex flex-col items-center justify-center min-h-[350px]">
           <div className="absolute inset-0 pointer-events-none select-none opacity-10 flex items-center justify-center">
-            {/* Decorative SVG or illustration */}
+        
             <svg width="600" height="300" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg">
               <ellipse cx="300" cy="150" rx="280" ry="120" fill="url(#grad1)" />
               <defs>
