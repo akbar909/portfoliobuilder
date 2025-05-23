@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
-import Link from "next/link"
-import { Menu, X } from "lucide-react"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { Menu, X } from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
 
 export function PortfolioNavbar({ username }: { username: string }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -41,6 +41,9 @@ export function PortfolioNavbar({ username }: { username: string }) {
           <button onClick={() => scrollToSection("projects")} className="text-sm hover:text-primary">
             Projects
           </button>
+          <button onClick={() => scrollToSection("experience")} className="text-sm hover:text-primary">
+            Experience
+          </button>
           <button onClick={() => scrollToSection("contact")} className="text-sm hover:text-primary">
             Contact
           </button>
@@ -68,6 +71,9 @@ export function PortfolioNavbar({ username }: { username: string }) {
             </button>
             <button onClick={() => scrollToSection("projects")} className="text-left text-sm">
               Projects
+            </button>
+            <button onClick={() => scrollToSection("experience")} className="text-left text-sm">
+              Experience
             </button>
             <button onClick={() => scrollToSection("contact")} className="text-left text-sm">
               Contact

@@ -107,6 +107,10 @@ export function AboutForm({ portfolio }: AboutFormProps) {
       toast.error("About Description Required. Please write a description")
       return
     }
+    if (!aboutProfileImage) {
+      toast.error("About Image Required. Please upload an image")
+      return
+    }
     // Validation: Each skill must have an image and a name
     for (let i = 0; i < skills.length; i++) {
       if (!skills[i].name.trim()) {

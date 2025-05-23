@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server"
 import connectDB from "@/lib/db"
-import User from "@/models/User"
 import Portfolio from "@/models/Portfolio"
+import User from "@/models/User"
+import { NextResponse } from "next/server"
 
 export async function GET(request, { params }) {
   try {
@@ -20,6 +20,8 @@ export async function GET(request, { params }) {
     if (!portfolio) {
       return NextResponse.json({ error: "Portfolio not found" }, { status: 404 })
     }
+
+    // console.log("Fetched portfolio experiences:", portfolio.experiences);
 
     // Remove sensitive information
     const safePortfolio = {

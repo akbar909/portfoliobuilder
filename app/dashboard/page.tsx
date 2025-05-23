@@ -2,6 +2,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { AboutForm } from "@/components/dashboard/about-form"
 import { ContactForm } from "@/components/dashboard/contact-form"
 import DashboardProfileMenu from "@/components/dashboard/DashboardProfileMenu"
+import { ExperienceForm } from "@/components/dashboard/experience-form"
 import { HeroForm } from "@/components/dashboard/hero-form"
 import { ProjectForm } from "@/components/dashboard/project-form"
 import { ThemeForm } from "@/components/dashboard/theme-form"
@@ -41,7 +42,7 @@ export default async function Dashboard() {
           <h1 className="text-3xl font-bold">Dashboard</h1>
           <div className="flex items-center gap-4">
             <Link href={`/${session.user.username}`} target="_blank">
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button variant="outline" className="hidden md:flex items-center gap-2">
                 <ExternalLink className="h-4 w-4" />
                 View Portfolio
               </Button>
@@ -52,13 +53,16 @@ export default async function Dashboard() {
         </div>
 
         <Tabs defaultValue="hero" className="w-full">
-          <TabsList className="mb-6">
+          <TabsList className="mb-6 flex flex-col sm:flex-row flex-wrap gap-2 sm:justify-center">
             <TabsTrigger value="hero">Hero Section</TabsTrigger>
             <TabsTrigger value="about">About</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
+            <TabsTrigger value="experience">Experience</TabsTrigger>
             <TabsTrigger value="contact">Contact</TabsTrigger>
             <TabsTrigger value="theme">Theme</TabsTrigger>
           </TabsList>
+
+
 
           <TabsContent value="hero" className="space-y-4">
             <HeroForm portfolio={portfolioData} />
@@ -67,7 +71,7 @@ export default async function Dashboard() {
           <TabsContent value="about" className="space-y-4">
             <AboutForm portfolio={portfolioData} />
           </TabsContent>
-      
+
 
           <TabsContent value="projects" className="space-y-4">
             <ProjectForm projects={portfolioData.projects || []} />
@@ -79,6 +83,10 @@ export default async function Dashboard() {
 
           <TabsContent value="theme" className="space-y-4">
             <ThemeForm portfolio={portfolioData} />
+          </TabsContent>
+
+          <TabsContent value="experience" className="space-y-4">
+            <ExperienceForm experiences={portfolioData.experiences || []} />
           </TabsContent>
         </Tabs>
       </div>

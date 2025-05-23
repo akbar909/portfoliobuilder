@@ -29,6 +29,30 @@ const ProjectSchema = new mongoose.Schema({
   },
 })
 
+const ExperienceSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  company: {
+    type: String,
+    required: true,
+  },
+  location: {
+    type: String,
+  },
+  startDate: {
+    type: Date,
+    required: true,
+  },
+  endDate: {
+    type: Date,
+  },
+  description: {
+    type: String,
+  },
+})
+
 
 const PortfolioSchema = new mongoose.Schema({
   user: {
@@ -52,7 +76,7 @@ const PortfolioSchema = new mongoose.Schema({
   },
   heroSubtitle: {
     type: String,
-    default: "I build things for the web",
+    default: "Welcome to my personal space on the internet",
   },
   heroImage: {
     type: String,
@@ -60,14 +84,14 @@ const PortfolioSchema = new mongoose.Schema({
   // About section fields
   aboutDescription: {
     type: String,
-    default: "I am a developer passionate about building web applications.",
+    default: "I am passionate about sharing my work and connecting with others through this platform..",
   },
   aboutProfileImage: {
     type: String,
   },
   aboutTitle: {
     type: String,
-    default: "Full Stack Developer",
+    default: "Creative Individual",
   },
   aboutLocation: {
     type: String,
@@ -114,6 +138,8 @@ const PortfolioSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  experiences: [ExperienceSchema],
+
 })
 
 export default mongoose.models.Portfolio || mongoose.model("Portfolio", PortfolioSchema)

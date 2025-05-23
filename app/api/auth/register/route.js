@@ -36,9 +36,10 @@ export async function POST(request) {
     // Create default portfolio for the user with initialized basic about fields
     await Portfolio.create({
       user: user._id,
-      aboutDescription: "I am a developer passionate about building web applications.",
-      aboutTitle: "Full Stack Developer",
-    })
+      aboutTitle: "Creative Individual",
+      aboutDescription: "I am passionate about sharing my work and connecting with others through this platform.",
+    });
+
 
     return NextResponse.json({ success: true, message: "User registered successfully" }, { status: 201 })
   } catch (error) {

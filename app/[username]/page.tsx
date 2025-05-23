@@ -1,13 +1,14 @@
-import type React from "react"
-import { notFound } from "next/navigation"
-import connectDB from "@/lib/db"
-import User from "@/models/User"
-import Portfolio from "@/models/Portfolio"
-import { HeroSection } from "@/components/portfolio/hero-section"
 import { AboutSection } from "@/components/portfolio/about-section"
-import { ProjectSection } from "@/components/portfolio/project-section"
 import { ContactSection } from "@/components/portfolio/contact-section"
+import { ExperienceSection } from "@/components/portfolio/experience-section"
+import { HeroSection } from "@/components/portfolio/hero-section"
 import { PortfolioNavbar } from "@/components/portfolio/portfolio-navbar"
+import { ProjectSection } from "@/components/portfolio/project-section"
+import connectDB from "@/lib/db"
+import Portfolio from "@/models/Portfolio"
+import User from "@/models/User"
+import { notFound } from "next/navigation"
+import type React from "react"
 
 interface PortfolioPageProps {
   params: {
@@ -16,7 +17,7 @@ interface PortfolioPageProps {
 }
 
 export default async function PortfolioPage({ params }: PortfolioPageProps) {
-  const { username } = params
+  const { username } = await params
 
   await connectDB()
 
@@ -33,6 +34,13 @@ export default async function PortfolioPage({ params }: PortfolioPageProps) {
   if (!portfolio) {
     notFound()
   }
+
+  // Ensure experiences array is initialized
+  if (!portfolio.experiences) {
+    portfolio.experiences = []
+  }
+
+  // console.log("Portfolio experiences:", portfolio.experiences)
 
   const primaryColor = portfolio.customizations?.primaryColor || "#3b82f6"
 
@@ -74,6 +82,11 @@ export default async function PortfolioPage({ params }: PortfolioPageProps) {
         <section id="projects" className="mb-12 pt-16 -mt-16">
           <h2 className="mb-8 text-2xl font-bold">Projects</h2>
           <ProjectSection projects={portfolio.projects || []} primaryColor={primaryColor} />
+        </section>
+
+        <section id="experience" className="mb-12 pt-16 -mt-16">
+          <h2 className="mb-8 text-2xl font-bold">Experience</h2>
+          <ExperienceSection experiences={portfolio.experiences || []} primaryColor={primaryColor} />
         </section>
 
         <section id="contact" className="pt-16 -mt-16">

@@ -6,6 +6,9 @@ import Link from "next/link";
 
 export default function Home() {
   const { data: session } = useSession();
+
+    // console.log("name " + session?.user?.name)
+    // console.log("email " + session?.user?.email)
   return (
     <div className="flex flex-col">
       <section className="w-full py-16 md:py-28 lg:py-36 bg-gradient-to-br from-primary/5 to-background relative overflow-hidden">
@@ -31,7 +34,7 @@ export default function Home() {
             </p>
             {session ? (
               <div className="mt-8 max-w-2xl mx-auto flex flex-col items-center gap-2 bg-white/80 dark:bg-black/40 rounded-xl shadow-lg p-8 border border-primary/10">
-                <h2 className="text-3xl font-bold text-primary mb-2">Welcome back, {session.user.name || session.user.email}!</h2>
+                <h2 className="text-3xl font-bold text-primary mb-2">Welcome back, {session?.user?.name || session?.user?.email}!</h2>
                 <p className="text-muted-foreground mb-4">Ready to update your portfolio? Head to your dashboard to manage your projects, skills, and more.</p>
                 <Link href="/dashboard">
                   <Button size="lg" className="px-8 py-2 text-lg">Go to Dashboard</Button>

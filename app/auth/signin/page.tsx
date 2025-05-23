@@ -84,7 +84,7 @@ export default function SignIn() {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="Enter you email"
                 required
                 value={formData.email}
                 onChange={handleChange}
@@ -104,6 +104,7 @@ export default function SignIn() {
                 id="password"
                 name="password"
                 type="password"
+                placeholder="Enter password"
                 required
                 value={formData.password}
                 onChange={handleChange}

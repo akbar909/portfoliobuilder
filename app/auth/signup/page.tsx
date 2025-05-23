@@ -124,6 +124,7 @@ export default function SignUp() {
                 id="password"
                 name="password"
                 type="password"
+                placeholder="Password"
                 required
                 value={formData.password}
                 onChange={handleChange}
@@ -135,6 +136,7 @@ export default function SignUp() {
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"
+                placeholder="Confirm Password"
                 required
                 value={formData.confirmPassword}
                 onChange={handleChange}
