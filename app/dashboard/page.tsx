@@ -55,6 +55,7 @@ export default async function Dashboard() {
         </div>
 
         <Tabs defaultValue="hero" className="w-full">
+<<<<<<< HEAD
           <TabsList className="mb-6 flex flex-wrap gap-2 overflow-x-auto whitespace-nowrap sm:justify-center">
             <TabsTrigger value="hero">Hero Section</TabsTrigger>
             <TabsTrigger value="about">About</TabsTrigger>
@@ -64,6 +65,17 @@ export default async function Dashboard() {
             <TabsTrigger value="contact">Contact</TabsTrigger>
             <TabsTrigger value="theme">Theme</TabsTrigger>
           </TabsList>
+=======
+         <TabsList className="mb-6 flex flex-wrap gap-2 overflow-x-auto whitespace-nowrap sm:justify-center">
+  <TabsTrigger value="hero">Hero Section</TabsTrigger>
+  <TabsTrigger value="about">About</TabsTrigger>
+  <TabsTrigger value="projects">Projects</TabsTrigger>
+  <TabsTrigger value="experience">Experience</TabsTrigger>
+  <TabsTrigger value="contact">Contact</TabsTrigger>
+  <TabsTrigger value="theme">Theme</TabsTrigger>
+</TabsList>
+
+>>>>>>> b80d68f94a5cd698d67a8bea32f6fd0c98c7fbcc
 
 
 
