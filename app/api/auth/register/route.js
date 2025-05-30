@@ -6,7 +6,7 @@ import { NextResponse } from "next/server"
 
 export async function POST(request) {
   try {
-    const { name, email, username, password } = await request.json()
+    const { name, email, username, password,image, role } = await request.json()
 
     await connectDB()
 
@@ -31,7 +31,9 @@ export async function POST(request) {
       email,
       username,
       password: hashedPassword,
-    })
+      role: role || "user",
+    }) 
+   console.log(user)
 
     // Create default portfolio for the user with initialized basic about fields
     await Portfolio.create({

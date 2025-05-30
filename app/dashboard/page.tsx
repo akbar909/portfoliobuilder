@@ -2,19 +2,20 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { AboutForm } from "@/components/dashboard/about-form"
 import { ContactForm } from "@/components/dashboard/contact-form"
 import DashboardProfileMenu from "@/components/dashboard/DashboardProfileMenu"
+import { EducationForm } from "@/components/dashboard/education-form"
 import { ExperienceForm } from "@/components/dashboard/experience-form"
 import { HeroForm } from "@/components/dashboard/hero-form"
 import { ProjectForm } from "@/components/dashboard/project-form"
 import { ThemeForm } from "@/components/dashboard/theme-form"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import connectDB from "@/lib/db"
 import Portfolio from "@/models/Portfolio"
 import { ExternalLink } from "lucide-react"
 import { getServerSession } from "next-auth/next"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-
 export default async function Dashboard() {
   const session = await getServerSession(authOptions)
 
@@ -47,20 +48,23 @@ export default async function Dashboard() {
                 View Portfolio
               </Button>
             </Link>
+            <ThemeToggle />
             {/* Profile Button Dropdown */}
             <DashboardProfileMenu />
           </div>
         </div>
 
         <Tabs defaultValue="hero" className="w-full">
-          <TabsList className="mb-6 flex flex-col sm:flex-row flex-wrap gap-2 sm:justify-center">
+          <TabsList className="mb-6 flex flex-wrap gap-2 overflow-x-auto whitespace-nowrap sm:justify-center">
             <TabsTrigger value="hero">Hero Section</TabsTrigger>
             <TabsTrigger value="about">About</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="experience">Experience</TabsTrigger>
+            <TabsTrigger value="education">Education</TabsTrigger>
             <TabsTrigger value="contact">Contact</TabsTrigger>
             <TabsTrigger value="theme">Theme</TabsTrigger>
           </TabsList>
+
 
 
 
@@ -87,6 +91,10 @@ export default async function Dashboard() {
 
           <TabsContent value="experience" className="space-y-4">
             <ExperienceForm experiences={portfolioData.experiences || []} />
+          </TabsContent>
+
+          <TabsContent value="education" className="space-y-4">
+            <EducationForm educationList={portfolioData.education || []} />
           </TabsContent>
         </Tabs>
       </div>

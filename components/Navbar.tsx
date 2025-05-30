@@ -1,11 +1,6 @@
 "use client"
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useSession, signOut } from "next-auth/react"
-import { Menu, X } from "lucide-react"
-import { useState } from "react"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -15,9 +10,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Skeleton } from "@/components/ui/skeleton"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { useCurrentUser } from "@/hooks/useCurrentUser"
+import { Menu, X } from "lucide-react"
+import { signOut } from "next-auth/react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useState } from "react"
 
 export default function Navbar() {
-  const { data: session } = useSession()
+  const { user, loading, refetch } = useCurrentUser();
   const pathname = usePathname()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -50,29 +53,29 @@ export default function Navbar() {
             Home
           </Link>
 
-          {session ? (
+          {loading ? (
+            <Skeleton className="h-8 w-8 rounded-full bg-muted animate-pulse" />
+          ) : user ? (
             <>
               <Link href="/dashboard" className={`text-sm ${isDashboard ? "font-medium" : "text-muted-foreground"}`}>
                 Dashboard
               </Link>
-              <Link href={`/${session.user.username}`} className="text-sm text-muted-foreground" target="_blank">
+              <Link href={`/${user.username}`} className="text-sm text-muted-foreground" target="_blank">
                 View Portfolio
               </Link>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full bg-primary">
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full bg-primary p-0">
                     <span className="sr-only">Open user menu</span>
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full  text-primary-foreground">
-                      {session.user.name?.[0] || "U"}
-                    </div>
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user.image || undefined} alt={user.name || "User"} />
+                      <AvatarFallback>{user.name?.[0] || "U"}</AvatarFallback>
+                    </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  {/* <DropdownMenuItem asChild>
-                    <Link href="/dashboard">Dashboard</Link>
-                  </DropdownMenuItem> */}
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard/settings">Settings</Link>
                   </DropdownMenuItem>
@@ -115,7 +118,9 @@ export default function Navbar() {
               Home
             </Link>
 
-            {session ? (
+            {loading ? (
+              <Skeleton className="h-8 w-8 rounded-full bg-muted animate-pulse" />
+            ) : user ? (
               <>
                 <Link
                   href="/dashboard"
@@ -125,7 +130,7 @@ export default function Navbar() {
                   Dashboard
                 </Link>
                 <Link
-                  href={`/${session.user.username}`}
+                  href={`/${user.username}`}
                   className="text-sm text-muted-foreground"
                   target="_blank"
                   onClick={toggleMenu}

@@ -1,5 +1,6 @@
 import { AboutSection } from "@/components/portfolio/about-section"
 import { ContactSection } from "@/components/portfolio/contact-section"
+import { EducationSection } from "@/components/portfolio/education-section"
 import { ExperienceSection } from "@/components/portfolio/experience-section"
 import { HeroSection } from "@/components/portfolio/hero-section"
 import { PortfolioNavbar } from "@/components/portfolio/portfolio-navbar"
@@ -87,6 +88,11 @@ export default async function PortfolioPage({ params }: PortfolioPageProps) {
         <section id="experience" className="mb-12 pt-16 -mt-16">
           <h2 className="mb-8 text-2xl font-bold">Experience</h2>
           <ExperienceSection experiences={portfolio.experiences || []} primaryColor={primaryColor} />
+        </section>
+
+        <section id="education" className="mb-12 pt-16 -mt-16">
+          <h2 className="mb-8 text-2xl font-bold">Education</h2>
+          <EducationSection education={portfolio.education || []} primaryColor={primaryColor} />
         </section>
 
         <section id="contact" className="pt-16 -mt-16">

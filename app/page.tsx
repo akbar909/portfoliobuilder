@@ -7,8 +7,6 @@ import Link from "next/link";
 export default function Home() {
   const { data: session } = useSession();
 
-    // console.log("name " + session?.user?.name)
-    // console.log("email " + session?.user?.email)
   return (
     <div className="flex flex-col">
       <section className="w-full py-16 md:py-28 lg:py-36 bg-gradient-to-br from-primary/5 to-background relative overflow-hidden">

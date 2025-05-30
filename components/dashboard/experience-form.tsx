@@ -4,10 +4,14 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
+import { format, parseISO } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { useRef } from "react";
 
 interface Experience {
@@ -184,21 +188,69 @@ export function ExperienceForm({ experiences: initialExperiences }: ExperienceFo
             </div>
             <div>
               <Label>Start Date</Label>
-              <Input
-                type="date"
-                value={currentExperience.startDate}
-                onChange={(e) => setCurrentExperience({ ...currentExperience, startDate: e.target.value })}
-              />
-
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={
+                      "w-full justify-start text-left font-normal" +
+                      (currentExperience.startDate ? "" : " text-muted-foreground")
+                    }
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {currentExperience.startDate
+                      ? format(parseISO(currentExperience.startDate), "yyyy-MM-dd")
+                      : "Pick a date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={currentExperience.startDate ? parseISO(currentExperience.startDate) : undefined}
+                    onSelect={(date) => {
+                      setCurrentExperience((prev) => ({
+                        ...prev,
+                        startDate: date ? format(date, "yyyy-MM-dd") : "",
+                      }));
+                    }}
+                    initialFocus
+                    captionLayout="dropdown"
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
             <div>
               <Label>End Date</Label>
-              <Input
-                type="date"
-                value={currentExperience.endDate}
-                onChange={(e) => setCurrentExperience({ ...currentExperience, endDate: e.target.value })}
-              />
-
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={
+                      "w-full justify-start text-left font-normal" +
+                      (currentExperience.endDate ? "" : " text-muted-foreground")
+                    }
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {currentExperience.endDate
+                      ? format(parseISO(currentExperience.endDate), "yyyy-MM-dd")
+                      : "Pick a date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={currentExperience.endDate ? parseISO(currentExperience.endDate) : undefined}
+                    onSelect={(date) => {
+                      setCurrentExperience((prev) => ({
+                        ...prev,
+                        endDate: date ? format(date, "yyyy-MM-dd") : "",
+                      }));
+                    }}
+                    initialFocus
+                    captionLayout="dropdown"
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
             <div>
               <Label>Description</Label>

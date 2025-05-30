@@ -44,6 +44,9 @@ export function PortfolioNavbar({ username }: { username: string }) {
           <button onClick={() => scrollToSection("experience")} className="text-sm hover:text-primary">
             Experience
           </button>
+          <button onClick={() => scrollToSection("education")} className="text-sm hover:text-primary">
+            Education
+          </button>
           <button onClick={() => scrollToSection("contact")} className="text-sm hover:text-primary">
             Contact
           </button>
@@ -74,6 +77,9 @@ export function PortfolioNavbar({ username }: { username: string }) {
             </button>
             <button onClick={() => scrollToSection("experience")} className="text-left text-sm">
               Experience
+            </button>
+            <button onClick={() => scrollToSection("education")} className="text-left text-sm">
+              Education
             </button>
             <button onClick={() => scrollToSection("contact")} className="text-left text-sm">
               Contact

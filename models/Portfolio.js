@@ -53,6 +53,29 @@ const ExperienceSchema = new mongoose.Schema({
   },
 })
 
+const EducationSchema = new mongoose.Schema({
+  degree: {
+    type: String,
+    required: true,
+  },
+  institution: {
+    type: String,
+    required: true,
+  },
+  location: {
+    type: String,
+  },
+  startDate: {
+    type: Date,
+    required: true,
+  },
+  endDate: {
+    type: Date,
+  },
+  description: {
+    type: String,
+  },
+})
 
 const PortfolioSchema = new mongoose.Schema({
   user: {
@@ -139,6 +162,7 @@ const PortfolioSchema = new mongoose.Schema({
     default: Date.now,
   },
   experiences: [ExperienceSchema],
+  education: [EducationSchema],
 
 })
 
