@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth/next"
 import connectDB from "@/lib/db"
 import Portfolio from "@/models/Portfolio"
+import { getServerSession } from "next-auth/next"
+import { NextResponse } from "next/server"
 import { authOptions } from "../../auth/[...nextauth]/route"
 
 export async function GET(request) {
@@ -37,13 +37,18 @@ export async function POST(request) {
 
     const projectData = await request.json()
 
-    // Validate required fields
+    // Set type, default to 'development' if not provided
+    const type = projectData.type || "development"
+
+    // Validate required fields based on type
     if (!projectData.title) {
       return NextResponse.json({ error: "Project title is required" }, { status: 400 })
     }
-
     if (!projectData.description) {
       return NextResponse.json({ error: "Project description is required" }, { status: 400 })
+    }
+    if ((type === "design" || type === "other") && !projectData.image) {
+      return NextResponse.json({ error: "Project image is required for design/other projects" }, { status: 400 })
     }
 
     await connectDB()
@@ -54,22 +59,26 @@ export async function POST(request) {
       return NextResponse.json({ error: "Portfolio not found" }, { status: 404 })
     }
 
-    // Ensure technologies is an array
-    if (!Array.isArray(projectData.technologies)) {
-      projectData.technologies = []
+    // Ensure technologies is an array for development, otherwise ignore
+    let technologies = []
+    if (type === "development") {
+      technologies = Array.isArray(projectData.technologies) ? projectData.technologies : []
     }
 
     // Ensure other fields have default values if not provided
     const newProject = {
       title: projectData.title,
       description: projectData.description,
+      type,
       image: projectData.image || "",
-      link: projectData.link || "",
-      github: projectData.github || "",
-      technologies: projectData.technologies,
+      link: type === "development" ? (projectData.link || "") : undefined,
+      github: type === "development" ? (projectData.github || "") : undefined,
+      technologies,
       featured: Boolean(projectData.featured),
       order: typeof projectData.order === "number" ? projectData.order : portfolio.projects.length,
     }
+    // Remove undefined fields for design/other
+    Object.keys(newProject).forEach(key => newProject[key] === undefined && delete newProject[key])
 
     // Add the new project to the projects array
     portfolio.projects.push(newProject)

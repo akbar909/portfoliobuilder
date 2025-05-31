@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth/next"
-import mongoose from "mongoose"
 import connectDB from "@/lib/db"
 import Portfolio from "@/models/Portfolio"
+import mongoose from "mongoose"
+import { getServerSession } from "next-auth/next"
+import { NextResponse } from "next/server"
 import { authOptions } from "../../../auth/[...nextauth]/route"
 
 export async function GET(request, { params }) {
@@ -50,13 +50,18 @@ export async function PUT(request, { params }) {
     const { id } = params
     const projectData = await request.json()
 
-    // Validate required fields
+    // Set type, default to 'development' if not provided
+    const type = projectData.type || "development"
+
+    // Validate required fields based on type
     if (!projectData.title) {
       return NextResponse.json({ error: "Project title is required" }, { status: 400 })
     }
-
     if (!projectData.description) {
       return NextResponse.json({ error: "Project description is required" }, { status: 400 })
+    }
+    if ((type === "design" || type === "other") && !projectData.image) {
+      return NextResponse.json({ error: "Project image is required for design/other projects" }, { status: 400 })
     }
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -74,23 +79,27 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 })
     }
 
-    // Ensure technologies is an array
-    if (!Array.isArray(projectData.technologies)) {
-      projectData.technologies = []
+    // Ensure technologies is an array for development, otherwise ignore
+    let technologies = []
+    if (type === "development") {
+      technologies = Array.isArray(projectData.technologies) ? projectData.technologies : []
     }
 
     // Prepare the update data
     const updateData = {
       "projects.$.title": projectData.title,
       "projects.$.description": projectData.description,
+      "projects.$.type": type,
       "projects.$.image": projectData.image || "",
-      "projects.$.link": projectData.link || "",
-      "projects.$.github": projectData.github || "",
-      "projects.$.technologies": projectData.technologies,
+      "projects.$.link": type === "development" ? (projectData.link || "") : undefined,
+      "projects.$.github": type === "development" ? (projectData.github || "") : undefined,
+      "projects.$.technologies": technologies,
       "projects.$.featured": Boolean(projectData.featured),
       "projects.$.order": typeof projectData.order === "number" ? projectData.order : 0,
       updatedAt: Date.now(),
     }
+    // Remove undefined fields for design/other
+    Object.keys(updateData).forEach(key => updateData[key] === undefined && delete updateData[key])
 
     // Update the project
     const updatedPortfolio = await Portfolio.findOneAndUpdate(

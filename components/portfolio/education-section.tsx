@@ -1,4 +1,3 @@
-
 interface Education {
   _id: string;
   degree: string;
@@ -21,20 +20,52 @@ export function EducationSection({ education, primaryColor }: EducationSectionPr
 
   return (
     <div className="">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-        {education.map((edu) => (
-          <div key={edu._id} className="rounded-lg border bg-card shadow-sm p-6 flex flex-col h-full">
-            <div className="mb-2">
-              <h3 className="text-lg font-semibold" style={{ color: primaryColor }}>{edu.degree}</h3>
-              <div className="text-muted-foreground text-sm">{edu.institution}</div>
-              {edu.location && <div className="text-xs text-muted-foreground mt-1">{edu.location}</div>}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {education.map((edu) => {
+          // Get institution initials for avatar
+          const initials = edu.institution
+            ? edu.institution
+                .split(" ")
+                .map((w) => w[0])
+                .join("")
+                .slice(0, 2)
+                .toUpperCase()
+            : "?";
+          return (
+            <div
+              key={edu._id}
+              className="relative flex flex-col rounded-xl bg-card shadow-sm border overflow-hidden group transition-all hover:shadow-lg"
+              style={{ borderLeft: `6px solid ${primaryColor}` }}
+            >
+              {/* Avatar */}
+              <div className="flex items-center gap-3 mb-4 mt-2 px-4">
+                <div
+                  className="flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold shadow"
+                  style={{ backgroundColor: `${primaryColor}22`, color: primaryColor }}
+                >
+                  {initials}
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold leading-tight" style={{ color: primaryColor }}>{edu.degree}</h3>
+                  <p className="text-sm text-muted-foreground font-medium">{edu.institution}</p>
+                </div>
+              </div>
+              {/* Dates & Location */}
+              <div className="px-4 flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-2">
+                <span>
+                  {new Date(edu.startDate).toLocaleDateString()} - {edu.endDate ? new Date(edu.endDate).toLocaleDateString() : "Present"}
+                </span>
+                {edu.location && <span className="hidden sm:inline">• {edu.location}</span>}
+              </div>
+              {/* Description */}
+              {edu.description && (
+                <div className="px-4 pb-4">
+                  <p className="text-sm text-muted-foreground leading-relaxed">{edu.description}</p>
+                </div>
+              )}
             </div>
-            <div className="text-xs text-muted-foreground mb-2">
-              {new Date(edu.startDate).toLocaleDateString()} - {edu.endDate ? new Date(edu.endDate).toLocaleDateString() : "Present"}
-            </div>
-            {edu.description && <div className="mt-2 text-sm text-gray-700">{edu.description}</div>}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

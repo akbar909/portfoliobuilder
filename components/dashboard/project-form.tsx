@@ -34,6 +34,7 @@ interface Project {
   technologies: string[]
   featured: boolean
   order: number
+  type?: "development" | "design" | "other"
 }
 
 interface ProjectFormProps {
@@ -54,6 +55,7 @@ export function ProjectForm({ projects: initialProjects }: ProjectFormProps) {
     technologies: [],
     featured: false,
     order: 0,
+    type: "development",
   })
   const [newTechnology, setNewTechnology] = useState("")
   const [imageFile, setImageFile] = useState<File | null>(null)
@@ -69,6 +71,7 @@ export function ProjectForm({ projects: initialProjects }: ProjectFormProps) {
       technologies: [],
       featured: false,
       order: projects.length,
+      type: "development",
     })
     setImageFile(null)
     setNewTechnology("")
@@ -112,7 +115,10 @@ export function ProjectForm({ projects: initialProjects }: ProjectFormProps) {
   }
 
   const handleEditProject = (project: Project) => {
-    setCurrentProject(project)
+    setCurrentProject({
+      ...project,
+      type: project.type ? project.type : "development",
+    })
     setIsEditing(true)
     setIsDialogOpen(true)
   }
@@ -240,6 +246,22 @@ export function ProjectForm({ projects: initialProjects }: ProjectFormProps) {
               <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2">
                 {/* Left Side */}
                 <div className="space-y-4">
+                  {/* Project Type */}
+                  <div className="space-y-2">
+                    <Label htmlFor="type">Project Type *</Label>
+                    <select
+                      id="type"
+                      title="Project Type"
+                      value={currentProject.type || "development"}
+                      onChange={e => setCurrentProject({ ...currentProject, type: e.target.value as Project["type"] })}
+                      className="bg-background dark:bg-background  w-full rounded-md border px-3 py-2"
+                      required
+                    >
+                      <option value="development">Development</option>
+                      <option value="design">Design</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
                   {/* Title */}
                   <div className="space-y-2">
                     <Label htmlFor="title">Project Title *</Label>
@@ -267,7 +289,7 @@ export function ProjectForm({ projects: initialProjects }: ProjectFormProps) {
 
                   {/* Project Image */}
                   <div className="space-y-2">
-                    <Label htmlFor="projectImage">Project Image</Label>
+                    <Label htmlFor="projectImage">Project Image{["design","other"].includes(currentProject.type || "") ? " *" : ""}</Label>
                     {currentProject.image ? (
                       <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
                         <Image
@@ -309,85 +331,91 @@ export function ProjectForm({ projects: initialProjects }: ProjectFormProps) {
 
                 {/* Right Side */}
                 <div className="space-y-4">
-                  {/* Live Demo and GitHub */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="link">Live Demo URL</Label>
-                      <Input
-                        id="link"
-                        value={currentProject.link || ""}
-                        onChange={(e) => setCurrentProject({ ...currentProject, link: e.target.value })}
-                        placeholder="https://example.com"
-                        type="url"
-                      />
-                    </div>
+                  {/* Only show these fields for development type */}
+                  {currentProject.type === "development" && (
+                    <>
+                      {/* Live Demo and GitHub */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="link">Live Demo URL</Label>
+                          <Input
+                            id="link"
+                            value={currentProject.link || ""}
+                            onChange={(e) => setCurrentProject({ ...currentProject, link: e.target.value })}
+                            placeholder="https://example.com"
+                            type="url"
+                          />
+                        </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="github">GitHub Repository</Label>
-                      <Input
-                        id="github"
-                        value={currentProject.github || ""}
-                        onChange={(e) => setCurrentProject({ ...currentProject, github: e.target.value })}
-                        placeholder="https://github.com/username/repo"
-                        type="url"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Technologies */}
-                  <div className="space-y-2">
-                    <Label>Technologies Used</Label>
-                    <div className="flex items-end gap-2">
-                      <div className="flex-1">
-                        <Input
-                          value={newTechnology}
-                          onChange={(e) => setNewTechnology(e.target.value)}
-                          placeholder="e.g. React, Node.js, MongoDB"
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              e.preventDefault()
-                              addTechnology()
-                            }
-                          }}
-                        />
+                        <div className="space-y-2">
+                          <Label htmlFor="github">GitHub Repository</Label>
+                          <Input
+                            id="github"
+                            value={currentProject.github || ""}
+                            onChange={(e) => setCurrentProject({ ...currentProject, github: e.target.value })}
+                            placeholder="https://github.com/username/repo"
+                            type="url"
+                          />
+                        </div>
                       </div>
-                      <Button type="button" onClick={addTechnology}>
-                        Add
-                      </Button>
-                    </div>
 
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {currentProject?.technologies?.length > 0 ? (
-                        currentProject.technologies.map((tech, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-sm text-primary"
-                          >
-                            {tech}
-                            <button
-                              type="button"
-                              onClick={() => removeTechnology(tech)}
-                              className="ml-1 rounded-full p-1 hover:bg-primary/20"
-                            >
-                              <X className="h-3 w-3" />
-                            </button>
+                      {/* Technologies */}
+                      <div className="space-y-2">
+                        <Label>Technologies Used</Label>
+                        <div className="flex items-end gap-2">
+                          <div className="flex-1">
+                            <Input
+                              value={newTechnology}
+                              onChange={(e) => setNewTechnology(e.target.value)}
+                              placeholder="e.g. React, Node.js, MongoDB"
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault()
+                                  addTechnology()
+                                }
+                              }}
+                            />
                           </div>
-                        ))
-                      ) : (
-                        <p className="text-sm text-muted-foreground">No technologies added yet.</p>
-                      )}
-                    </div>
-                  </div>
+                          <Button type="button" onClick={addTechnology}>
+                            Add
+                          </Button>
+                        </div>
 
-                  {/* Featured Project */}
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      id="featured"
-                      checked={currentProject.featured}
-                      onCheckedChange={(checked) => setCurrentProject({ ...currentProject, featured: checked })}
-                    />
-                    <Label htmlFor="featured">Featured Project</Label>
-                  </div>
+                        <div className="flex flex-wrap gap-2 pt-2">
+                          {currentProject?.technologies?.length > 0 ? (
+                            currentProject.technologies.map((tech, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-sm text-primary"
+                              >
+                                {tech}
+                                <button
+                                  type="button"
+                                  title={`Remove ${tech}`}
+                                  onClick={() => removeTechnology(tech)}
+                                  className="ml-1 rounded-full p-1 hover:bg-primary/20"
+                                >
+                                  <X className="h-3 w-3" />
+                                </button>
+                              </div>
+                            ))
+                          ) : (
+                            <p className="text-sm text-muted-foreground">No technologies added yet.</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Featured Project */}
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="featured"
+                          checked={currentProject.featured}
+                          onCheckedChange={(checked) => setCurrentProject({ ...currentProject, featured: checked })}
+                        />
+                        <Label htmlFor="featured">Featured Project</Label>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -471,6 +499,10 @@ function ProjectCard({ project, onEdit, onDelete }: ProjectCardProps) {
     <Card className="overflow-hidden">
       {project.image && (
         <div className="relative aspect-video w-full overflow-hidden">
+          {/* Project Type Tag */}
+          <div className="absolute left-2 top-2 z-10 rounded-full bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground capitalize">
+            {project.type ? project.type : "development"}
+          </div>
           <Image
             src={project.image || "/placeholder.svg"}
             alt={project.title}
@@ -478,7 +510,7 @@ function ProjectCard({ project, onEdit, onDelete }: ProjectCardProps) {
             className="object-cover transition-transform hover:scale-105"
           />
           {project.featured && (
-            <div className="absolute left-2 top-2 rounded-full bg-primary px-2 py-1 text-xs font-medium text-primary-foreground">
+            <div className="absolute left-2 top-10 rounded-full bg-primary px-2 py-1 text-xs font-medium text-primary-foreground">
               Featured
             </div>
           )}

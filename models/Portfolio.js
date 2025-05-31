@@ -9,6 +9,11 @@ const ProjectSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  type: {
+    type: String,
+    enum: ["development", "design", "other"],
+    default: "development",
+  },
   image: {
     type: String,
   },
