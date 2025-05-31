@@ -33,6 +33,16 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
+  verificationCode: {
+    type: String,
+  },
+  verificationCodeExpires: {
+    type: Date,
+  },
 })
 
 export default mongoose.models.User || mongoose.model("User", UserSchema)

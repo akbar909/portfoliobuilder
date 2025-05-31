@@ -6,19 +6,30 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 export default function SignIn() {
   const router = useRouter()
+  const { status } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   })
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/dashboard")
+    }
+  }, [status, router])
+
+  if (status === "authenticated") {
+    return null
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -43,17 +54,23 @@ export default function SignIn() {
       })
 
       if (result?.error) {
-        let errorMsg = result.error || "Sign in failed."
+        if (result.error === "UNVERIFIED_USER") {
+          toast.error("Your email is not verified. Please enter the code sent to your email.");
+          router.push(`/auth/verify-code?email=${encodeURIComponent(formData.email)}`);
+          setIsLoading(false);
+          return;
+        }
+        let errorMsg = result.error || "Sign in failed.";
         if (errorMsg && typeof errorMsg === "string") {
           if (errorMsg.includes("No user found")) {
-            errorMsg = "No account found with this email."
+            errorMsg = "No account found with this email.";
           } else if (errorMsg.includes("Invalid password")) {
-            errorMsg = "Invalid password."
+            errorMsg = "Invalid password.";
           }
         }
-        toast.error(errorMsg)
-        setIsLoading(false)
-        return
+        toast.error(errorMsg);
+        setIsLoading(false);
+        return;
       }
 
       toast.success("Signed in successfully! Redirecting...")

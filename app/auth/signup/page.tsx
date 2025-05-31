@@ -6,13 +6,15 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 export default function SignUp() {
   const router = useRouter()
+  const { status } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
@@ -21,6 +23,16 @@ export default function SignUp() {
     password: "",
     confirmPassword: "",
   })
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/dashboard")
+    }
+  }, [status, router])
+
+  if (status === "authenticated") {
+    return null
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -64,8 +76,8 @@ export default function SignUp() {
         return
       }
 
-      toast.success("Account created successfully. Please sign in.")
-      router.push("/auth/signin")
+      toast.success("Account created! Please check your email for the verification code.")
+      router.push(`/auth/verify-code?email=${encodeURIComponent(formData.email)}`)
     } catch (error: any) {
       console.error("Registration error:", error)
       toast.error(error.message || "Failed to create account")

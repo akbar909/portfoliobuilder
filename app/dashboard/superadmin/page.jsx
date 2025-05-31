@@ -10,6 +10,7 @@ function EditUserModal({ user, open, onClose, onSave }) {
     email: user?.email || "",
     username: user?.username || "",
     role: user?.role || "user",
+    verified: user?.verified || false,
   });
   useEffect(() => {
     setForm({
@@ -17,6 +18,7 @@ function EditUserModal({ user, open, onClose, onSave }) {
       email: user?.email || "",
       username: user?.username || "",
       role: user?.role || "user",
+      verified: user?.verified || false,
     });
   }, [user]);
   if (!open) return null;
@@ -79,6 +81,19 @@ function EditUserModal({ user, open, onClose, onSave }) {
             >
               <option value="user">User</option>
               <option value="superadmin">Superadmin</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1" htmlFor="edit-verified">Verified</label>
+            <select
+              id="edit-verified"
+              className="dark:bg-background dark:text-foreground w-full border rounded px-3 py-2"
+              value={form.verified ? "true" : "false"}
+              onChange={e => setForm(f => ({ ...f, verified: e.target.value === "true" }))}
+              title="Verified"
+            >
+              <option value="true">Verified</option>
+              <option value="false">Unverified</option>
             </select>
           </div>
           <div className="flex justify-end gap-2 mt-4">
@@ -174,6 +189,7 @@ export default function SuperadminDashboard() {
               <th className="p-3 text-left">Username</th>
               <th className="p-3 text-left">Email</th>
               <th className="p-3 text-left">Role</th>
+              <th className="p-3 text-left">Verified</th>
               <th className="p-3 text-left">Portfolio</th>
               <th className="p-3 text-left">Actions</th>
             </tr>
@@ -185,6 +201,31 @@ export default function SuperadminDashboard() {
                 <td className="p-3">{user.username}</td>
                 <td className="p-3">{user.email}</td>
                 <td className="p-3">{user.role}</td>
+                <td className="p-3">
+                  {user.verified ? (
+                    <span className="text-green-600 font-semibold">Yes</span>
+                  ) : (
+                    <span className="text-red-600 ">No</span>
+                  )}
+                  {/* <Button
+                    size="sm"
+                    variant={user.verified ? "destructive" : "default"}
+                    className="ml-2"
+                    onClick={async () => {
+                      setActionLoading(true);
+                      await fetch("/api/users", {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ userId: user._id, verified: !user.verified }),
+                      });
+                      fetchUsers();
+                      setActionLoading(false);
+                    }}
+                    disabled={actionLoading}
+                  >
+                    {user.verified ? "Unverify" : "Verify"}
+                  </Button> */}
+                </td>
                 <td className="p-3">
                   {user.portfolio ? (
                     <span className="text-green-600">Yes</span>

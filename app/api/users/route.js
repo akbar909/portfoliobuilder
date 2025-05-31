@@ -15,8 +15,14 @@ export async function GET(request) {
   if (!user || user.role !== "superadmin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
-  // Get all users
-  const users = await User.find({}, "_id name email username image role createdAt").lean();
+  // Optional: filter by verification status
+  const { searchParams } = new URL(request.url);
+  const verifiedFilter = searchParams.get("verified");
+  let userQuery = {};
+  if (verifiedFilter === "true") userQuery.verified = true;
+  if (verifiedFilter === "false") userQuery.verified = false;
+  // Get all users (with verified field)
+  const users = await User.find(userQuery, "_id name email username image role createdAt verified").lean();
   // Get all portfolios
   const portfolios = await Portfolio.find({}).lean();
   // Map portfolios to users
@@ -58,7 +64,7 @@ export async function PUT(request) {
   if (!user || user.role !== "superadmin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
-  const { userId, name, email, username, role } = await request.json();
+  const { userId, name, email, username, role, verified } = await request.json();
   if (!userId) {
     return NextResponse.json({ error: "User ID required" }, { status: 400 });
   }
@@ -67,6 +73,7 @@ export async function PUT(request) {
   if (email) update.email = email;
   if (username) update.username = username;
   if (role) update.role = role;
+  if (verified !== undefined) update.verified = verified;
   const updatedUser = await User.findByIdAndUpdate(userId, update, { new: true });
   return NextResponse.json({ message: "User updated", user: updatedUser });
 } 

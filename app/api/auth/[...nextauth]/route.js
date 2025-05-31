@@ -27,6 +27,10 @@ export const authOptions = {
           throw new Error("Invalid password")
         }
 
+        if (!user.verified) {
+          throw new Error("UNVERIFIED_USER")
+        }
+
         return {
           id: user._id.toString(),
           name: user.name,
