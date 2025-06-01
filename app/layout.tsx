@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { getServerSession } from "next-auth/next"
 import { Inter } from "next/font/google"
+import Script from "next/script"
 import type React from "react"
 import ClientLayout from "./ClientLayout"
 import "./globals.css"
@@ -25,6 +26,13 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8361394479217460"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className={inter.className}>
         <SessionProvider session={session}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>

@@ -3,16 +3,40 @@
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
+
+// Fix TypeScript error for window.adsbygoogle
+declare global {
+  interface Window {
+    adsbygoogle: unknown[];
+  }
+}
 
 export default function Home() {
   const { data: session } = useSession();
+    const adRef = useRef<HTMLDivElement>(null);
+  
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+        try {
+          // Ensure script exists
+          if (window.adsbygoogle && adRef.current) {
+            // @ts-ignore
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          }
+        } catch (e) {
+          console.error("AdSense error", e);
+        }
+      }
+    }, []);
+  
 
   return (
     <div className="flex flex-col">
       <section className="w-full py-16 md:py-28 lg:py-36 bg-gradient-to-br from-primary/5 to-background relative overflow-hidden">
         <div className="container px-4 md:px-6 flex flex-col items-center justify-center min-h-[350px]">
           <div className="absolute inset-0 pointer-events-none select-none opacity-10 flex items-center justify-center">
-        
+
             <svg width="600" height="300" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg">
               <ellipse cx="300" cy="150" rx="280" ry="120" fill="url(#grad1)" />
               <defs>
@@ -53,6 +77,21 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Google Ad Section Start */}
+      <section className="w-full flex justify-center py-6">
+        <div className="w-full max-w-2xl bg-muted rounded-lg border border-border shadow-sm flex items-center justify-center min-h-[90px]">
+          <ins
+            className="adsbygoogle"
+            style={{ display: 'block' }}
+            data-ad-client="ca-pub-8361394479217460"
+            data-ad-slot="3820927521"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+        </div>
+      </section>
+      {/* Google Ad Section End */}
 
       <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
         <div className="container px-4 md:px-6">
