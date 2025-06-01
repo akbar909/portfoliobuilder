@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth/next"
 import connectDB from "@/lib/db"
 import Portfolio from "@/models/Portfolio"
+import { getServerSession } from "next-auth/next"
+import { NextResponse } from "next/server"
 import { authOptions } from "../auth/[...nextauth]/route"
 
 export async function GET(request) {
@@ -49,6 +49,7 @@ export async function PUT(request) {
     if (data.heroTitle !== undefined) updateData.heroTitle = data.heroTitle
     if (data.heroSubtitle !== undefined) updateData.heroSubtitle = data.heroSubtitle
     if (data.heroImage !== undefined) updateData.heroImage = data.heroImage
+    if (data.heroTemplate !== undefined) updateData.heroTemplate = data.heroTemplate
 
     // Handle about section fields
     if (data.aboutDescription !== undefined) updateData.aboutDescription = data.aboutDescription

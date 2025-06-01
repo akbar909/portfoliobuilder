@@ -59,7 +59,7 @@ export default async function PortfolioPage({ params }: PortfolioPageProps) {
 
       <section id="home">
         <HeroSection
-          type={portfolio.heroType}
+          heroTemplate={portfolio.heroTemplate}
           title={portfolio.heroTitle}
           subtitle={portfolio.heroSubtitle}
           imageUrl={portfolio.heroImage}

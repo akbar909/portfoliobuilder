@@ -109,6 +109,11 @@ const PortfolioSchema = new mongoose.Schema({
   heroImage: {
     type: String,
   },
+  heroTemplate: {
+    type: String,
+    enum: ["hero1", "hero2", "hero3"],
+    default: "hero1",
+  },
   // About section fields
   aboutDescription: {
     type: String,

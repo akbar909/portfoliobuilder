@@ -2,16 +2,17 @@
 
 import type React from "react"
 
+import { HeroSection } from "@/components/portfolio/hero-section"
+import HeroTemplateSelector from "@/components/portfolio/HeroTemplateSelector"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { ImagePlus, Trash2 } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 interface HeroFormProps {
@@ -20,6 +21,7 @@ interface HeroFormProps {
     heroTitle: string
     heroSubtitle: string
     heroImage?: string
+    heroTemplate?: "hero1" | "hero2" | "hero3"
   }
 }
 
@@ -31,6 +33,12 @@ export function HeroForm({ portfolio }: HeroFormProps) {
   const [heroSubtitle, setHeroSubtitle] = useState(portfolio.heroSubtitle)
   const [heroImage, setHeroImage] = useState(portfolio.heroImage || "")
   const [imageFile, setImageFile] = useState<File | null>(null)
+  const [heroTemplate, setHeroTemplate] = useState<"hero1" | "hero2" | "hero3">((portfolio as any).heroTemplate || "hero1")
+
+  // Always set heroType to 'image' and hide the select
+  useEffect(() => {
+    setHeroType("image")
+  }, [])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -48,6 +56,13 @@ export function HeroForm({ portfolio }: HeroFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+
+    // Require image if heroType is 'image'
+    if (heroType === "image" && !heroImage) {
+      toast.error("Hero image is required.")
+      setIsLoading(false)
+      return
+    }
 
     try {
       let imageUrl = heroImage
@@ -80,6 +95,7 @@ export function HeroForm({ portfolio }: HeroFormProps) {
           heroType,
           heroTitle,
           heroSubtitle,
+          heroTemplate,
           ...(heroType === "image" && { heroImage: imageUrl }),
         }),
       })
@@ -107,9 +123,11 @@ export function HeroForm({ portfolio }: HeroFormProps) {
           <CardDescription>Customize how the hero section of your portfolio appears to visitors.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
+          {/* Hide heroType select, always use image */}
+          {/*
           <div className="space-y-2">
             <Label htmlFor="heroType">Hero Type</Label>
-            <Select value={heroType} onValueChange={(value) => setHeroType(value as "text" | "image")}>
+            <Select value={heroType} onValueChange={(value) => setHeroType(value as "text" | "image")}> 
               <SelectTrigger id="heroType">
                 <SelectValue placeholder="Select hero type" />
               </SelectTrigger>
@@ -119,6 +137,7 @@ export function HeroForm({ portfolio }: HeroFormProps) {
               </SelectContent>
             </Select>
           </div>
+          */}
 
           <div className="space-y-2">
             <Label htmlFor="heroTitle">Title</Label>
@@ -177,13 +196,35 @@ export function HeroForm({ portfolio }: HeroFormProps) {
               )}
             </div>
           )}
+          <div className="space-y-2 max-w-sm">
+            <Label>Hero Template</Label>
+            <HeroTemplateSelector
+              current={heroTemplate}
+              onChange={setHeroTemplate}
+            />
+          </div>
         </CardContent>
         <CardFooter>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Saving..." : "Save Changes"}
-          </Button>
+          <div className="mt-4">
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
         </CardFooter>
       </Card>
+      <div className="mt-8 space-y-6">
+        <div className="space-y-2">
+          <Label>Live Preview</Label>
+          <div className="border rounded-lg bg-muted p-4">
+            <HeroSection
+              heroTemplate={heroTemplate}
+              title={heroTitle}
+              subtitle={heroSubtitle}
+              imageUrl={heroImage}
+            />
+          </div>
+        </div>
+      </div>
     </form>
   )
 }
