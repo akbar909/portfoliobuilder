@@ -18,10 +18,12 @@ import { signOut } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
   const { user, loading, refetch } = useCurrentUser();
   const pathname = usePathname()
+  const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => {
@@ -53,14 +55,12 @@ export default function Navbar() {
             Home
           </Link>
 
-          {loading ? (
-            <Skeleton className="h-8 w-8 rounded-full bg-muted animate-pulse" />
-          ) : user ? (
+          {session ? (
             <>
               <Link href="/dashboard" className={`text-sm ${isDashboard ? "font-medium" : "text-muted-foreground"}`}>
                 Dashboard
               </Link>
-              <Link href={`/${user.username}`} className="text-sm text-muted-foreground" target="_blank">
+              <Link href={`/${session?.user?.username}`} className="text-sm text-muted-foreground" target="_blank">
                 View Portfolio
               </Link>
               <DropdownMenu>
@@ -68,8 +68,8 @@ export default function Navbar() {
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full bg-primary p-0">
                     <span className="sr-only">Open user menu</span>
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.image || undefined} alt={user.name || "User"} />
-                      <AvatarFallback>{user.name?.[0] || "U"}</AvatarFallback>
+                      <AvatarImage src={user?.image || undefined} alt={session?.user?.name || "User"} />
+                      <AvatarFallback>{session?.user?.name?.[0] || "U"}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>

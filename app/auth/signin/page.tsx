@@ -23,13 +23,13 @@ export default function SignIn() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      router.replace("/dashboard")
+      router.push("/dashboard")
     }
   }, [status, router])
 
-  if (status === "authenticated") {
-    return null
-  }
+  // if (status === "authenticated") {
+  //   return null
+  // }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
