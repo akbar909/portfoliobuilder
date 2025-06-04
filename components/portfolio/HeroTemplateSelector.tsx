@@ -14,10 +14,10 @@ export default function HeroTemplateSelector({ current, onChange }: HeroTemplate
       <SelectTrigger id="heroTemplate">
         <SelectValue placeholder="Select hero template" />
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="hero1">Template 1</SelectItem>
-        <SelectItem value="hero2">Template 2</SelectItem>
-        <SelectItem value="hero3">Template 3</SelectItem>
+      <SelectContent className="bg-background dark:bg-background-dark">
+        <SelectItem className="cursor-pointer"  value="hero1">Template 1</SelectItem>
+        <SelectItem className="cursor-pointer" value="hero2">Template 2</SelectItem>
+        <SelectItem className="cursor-pointer" value="hero3">Template 3</SelectItem>
       </SelectContent>
     </Select>
   )

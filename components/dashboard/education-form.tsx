@@ -275,10 +275,10 @@ export function EducationForm({ educationList }: EducationFormProps) {
                 {edu.description && <div className="mt-2 text-sm">{edu.description}</div>}
               </div>
               <div className="flex gap-2 mt-2 md:mt-0">
-                <Button type="button" variant="outline" onClick={() => handleEdit(edu)} disabled={isLoading}>
+                <Button type="button"  onClick={() => handleEdit(edu)} disabled={isLoading}>
                   Edit
                 </Button>
-                <Button type="button" variant="destructive" onClick={() => handleDelete(edu._id!)} disabled={isLoading}>
+                <Button type="button" className="bg-red-700 hover:bg-red-800 dark:text-white" onClick={() => handleDelete(edu._id!)} disabled={isLoading}>
                   Delete
                 </Button>
               </div>

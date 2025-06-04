@@ -8,7 +8,6 @@ import Script from "next/script"
 import type React from "react"
 import ClientLayout from "./ClientLayout"
 import "./globals.css"
-
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
@@ -34,16 +33,15 @@ export default async function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        <SessionProvider session={session}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider>
+          <SessionProvider session={session}>
             <ClientLayout>{children}</ClientLayout>
             <Toaster />
-          </ThemeProvider>
-        </SessionProvider>
+          </SessionProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
 }
-
 
 import './globals.css'

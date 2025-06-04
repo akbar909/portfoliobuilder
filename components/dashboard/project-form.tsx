@@ -300,9 +300,9 @@ export function ProjectForm({ projects: initialProjects }: ProjectFormProps) {
                         />
                         <Button
                           type="button"
-                          variant="destructive"
+                         
                           size="icon"
-                          className="absolute right-2 top-2"
+                          className="absolute right-2 top-2 bg-red-700 hover:bg-red-800 dark:text-white"
                           onClick={() => {
                             setCurrentProject({ ...currentProject, image: "" })
                             setImageFile(null)
@@ -563,10 +563,10 @@ function ProjectCard({ project, onEdit, onDelete }: ProjectCardProps) {
           )}
         </div>
         <div className="flex space-x-2">
-          <Button variant="ghost" size="sm" onClick={onEdit}>
+          <Button  size="sm" onClick={onEdit}>
             Edit
           </Button>
-          <Button variant="ghost" size="sm" onClick={onDelete}>
+          <Button size="sm" onClick={onDelete} className="bg-red-700 hover:bg-red-800 dark:text-white">
             Delete
           </Button>
         </div>

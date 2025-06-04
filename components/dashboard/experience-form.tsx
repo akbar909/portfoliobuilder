@@ -283,7 +283,7 @@ export function ExperienceForm({ experiences: initialExperiences }: ExperienceFo
             <p className="mt-2 text-muted-foreground">{exp.description}</p>
             <div className="mt-2 flex gap-2 flex-wrap">
               <Button
-                variant="outline"
+               
                 onClick={() => {
                   if (isEditing && currentExperience._id !== exp._id) {
                     const confirmSwitch = confirm("You have unsaved changes. Do you want to discard and edit another?");
@@ -303,7 +303,7 @@ export function ExperienceForm({ experiences: initialExperiences }: ExperienceFo
               </Button>
 
               <Button
-                variant="destructive"
+              className="bg-red-700 hover:bg-red-800 dark:text-white"
                 onClick={() => handleDelete(exp._id!)}
               >
                 Delete

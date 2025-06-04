@@ -7,6 +7,17 @@ interface HeroSectionProps {
   title: string
   subtitle: string
   imageUrl?: string
+  primaryColor: string
+  backgroundColor: string
+  backgroundColorDark: string
+  foregroundColor: string
+  foregroundColorDark: string
+  secondaryColor?: string
+  secondaryColorDark?: string
+  buttonColor: string;
+  buttonColorDark: string;
+  buttonTextColor: string;
+  buttonTextColorDark: string;
 }
 
 const heroTemplates = {
@@ -15,7 +26,22 @@ const heroTemplates = {
   hero3: Hero3,
 }
 
-export function HeroSection({ heroTemplate = "hero1", title, subtitle, imageUrl }: HeroSectionProps) {
+export function HeroSection({ heroTemplate = "hero1", title, subtitle, imageUrl, primaryColor, backgroundColor, backgroundColorDark, foregroundColor, foregroundColorDark, secondaryColor, secondaryColorDark, buttonColor, buttonColorDark, buttonTextColor, buttonTextColorDark }: HeroSectionProps) {
   const HeroComponent = heroTemplates[heroTemplate] || Hero1
-  return <HeroComponent title={title} subtitle={subtitle} image={imageUrl} />
+  return <HeroComponent 
+    title={title} 
+    subtitle={subtitle} 
+    image={imageUrl}
+    primaryColor={primaryColor}
+    backgroundColor={backgroundColor}
+    backgroundColorDark={backgroundColorDark}
+    foregroundColor={foregroundColor}
+    foregroundColorDark={foregroundColorDark}
+    secondaryColor={secondaryColor}
+    secondaryColorDark={secondaryColorDark}
+    buttonColor={buttonColor}
+    buttonColorDark={buttonColorDark}
+    buttonTextColor={buttonTextColor}
+    buttonTextColorDark={buttonTextColorDark}
+  />
 }

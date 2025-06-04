@@ -246,9 +246,9 @@ export function AboutForm({ portfolio }: AboutFormProps) {
         />
         <Button
           type="button"
-          variant="destructive"
+         
           size="icon"
-          className="ml-2 p-1"
+          className="ml-2 p-1 bg-red-700 hover:bg-red-800 dark:text-white"
           onClick={() => {
             const newSkills = [...skills]
             newSkills.splice(index, 1)
@@ -264,9 +264,9 @@ export function AboutForm({ portfolio }: AboutFormProps) {
           <Image src={skill.image} alt="Skill" fill className="object-contain" />
           <Button
             type="button"
-            variant="destructive"
+           
             size="icon"
-            className="absolute right-0 top-0 p-1"
+            className="absolute right-0 top-0 p-1 bg-red-700 hover:bg-red-800 dark:text-white"
             onClick={() => {
               const newSkills = [...skills]
               newSkills[index].image = ""
@@ -274,7 +274,7 @@ export function AboutForm({ portfolio }: AboutFormProps) {
               setSkills(newSkills)
             }}
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-3 w-3" />
           </Button>
         </div>
       ) : (

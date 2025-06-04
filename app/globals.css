@@ -4,19 +4,26 @@
 
 @layer base {
   :root {
+    --primary: 221.2 83.2% 53.3%;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-
+    --secondary: 210 40% 96.1%;
+    --button: 221.2 83.2% 53.3%;
+    --button-text: 0 0% 100%;
     --card: 0 0% 100%;
+    --link: 221.2 83.2% 53.3%;
+    --navbar: 0 0% 100%;
+    --footer: 0 0% 98%;
+    --radius: 0.5rem;
+    --font-family: Inter, system-ui, sans-serif;
+
     --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
@@ -31,24 +38,29 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
-
-    --radius: 0.5rem;
   }
 
   .dark {
+    --primary: 217.2 91.2% 59.8%;
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
+    --secondary: 217.2 32.6% 17.5%;
+    --button: 217.2 91.2% 59.8%;
+    --button-text: 210 40% 98%;
     --card: 222.2 84% 4.9%;
+    --link: 217.2 91.2% 59.8%;
+    --navbar: 222.2 84% 4.9%;
+    --footer: 217.2 32.6% 17.5%;
+    --radius: 0.5rem;
+    --font-family: Inter, system-ui, sans-serif;
+
     --card-foreground: 210 40% 98%;
 
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
@@ -75,11 +87,12 @@
   }
 }
 
-/* Custom CSS for portfolio pages */
+
 [style*="--primary"] {
   --primary-color: var(--primary);
   --tw-ring-color: hsl(var(--primary-color));
 }
+
 
 [style*="--primary"] .btn-primary,
 [style*="--primary"] .bg-primary {
@@ -91,8 +104,12 @@
   color: var(--primary-color);
 }
 
-[style*="--primary"] .border-primary {
-  border-color: var(--primary-color);
+.bg-custom-primary {
+  background-color: var(--primary-color);
+}
+
+.dark .bg-custom-background {
+  background-color: var(--background);
 }
 
 [style*="--font-family"] {

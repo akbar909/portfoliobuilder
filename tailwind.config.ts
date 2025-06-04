@@ -23,34 +23,40 @@ const config: Config = {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
+        backgroundDark: "hsl(var(--background-dark))",
         foreground: "hsl(var(--foreground))",
+        foregroundDark: "hsl(var(--foreground-dark))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          dark: "hsl(var(--secondary-dark))",
         },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+        button: {
+          DEFAULT: "hsl(var(--button))",
+          dark: "hsl(var(--button-dark))",
         },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+        buttonText: {
+          DEFAULT: "hsl(var(--button-text))",
+          dark: "hsl(var(--button-text-dark))",
         },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+        cardBackground: {
+          DEFAULT: "hsl(var(--card-background))",
+          dark: "hsl(var(--card-background-dark))",
         },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+        link: {
+          DEFAULT: "hsl(var(--link))",
+          dark: "hsl(var(--link-dark))",
         },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+        navbar: {
+          DEFAULT: "hsl(var(--navbar))",
+          dark: "hsl(var(--navbar-dark))",
+        },
+        footer: {
+          DEFAULT: "hsl(var(--footer))",
+          dark: "hsl(var(--footer-dark))",
         },
       },
       borderRadius: {
@@ -59,7 +65,7 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
+        sans: ["var(--font-family)", ...fontFamily.sans],
       },
       keyframes: {
         "accordion-down": {

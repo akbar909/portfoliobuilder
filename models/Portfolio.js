@@ -1,5 +1,7 @@
 import mongoose from "mongoose"
 
+
+
 const ProjectSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -158,6 +160,82 @@ const PortfolioSchema = new mongoose.Schema({
       type: String,
       default: "#3b82f6",
     },
+    backgroundColor: {
+      type: String,
+      default: "#ffffff",
+    },
+    backgroundColorDark: {
+      type: String,
+      default: "#18181b",
+    },
+    foregroundColor: {
+      type: String,
+      default: "#111827",
+    },
+    foregroundColorDark: {
+      type: String,
+      default: "#f4f4f5",
+    },
+    secondaryColor: {
+      type: String,
+      default: "#6366f1",
+    },
+    secondaryColorDark: {
+      type: String,
+      default: "#818cf8",
+    },
+    buttonColor: {
+      type: String,
+      default: "#2563eb",
+    },
+    buttonColorDark: {
+      type: String,
+      default: "#3b82f6",
+    },
+    buttonTextColor: {
+      type: String,
+      default: "#ffffff",
+    },
+    buttonTextColorDark: {
+      type: String,
+      default: "#f4f4f5",
+    },
+    cardBackgroundColor: {
+      type: String,
+      default: "#f3f4f6",
+    },
+    cardBackgroundColorDark: {
+      type: String,
+      default: "#27272a",
+    },
+    linkColor: {
+      type: String,
+      default: "#2563eb",
+    },
+    linkColorDark: {
+      type: String,
+      default: "#818cf8",
+    },
+    navbarColor: {
+      type: String,
+      default: "#ffffff",
+    },
+    navbarColorDark: {
+      type: String,
+      default: "#18181b",
+    },
+    footerColor: {
+      type: String,
+      default: "#f9fafb",
+    },
+    footerColorDark: {
+      type: String,
+      default: "#27272a",
+    },
+    borderRadius: {
+      type: String,
+      default: "0.5rem",
+    },
     fontFamily: {
       type: String,
       default: "Inter",
@@ -177,3 +255,4 @@ const PortfolioSchema = new mongoose.Schema({
 })
 
 export default mongoose.models.Portfolio || mongoose.model("Portfolio", PortfolioSchema)
+

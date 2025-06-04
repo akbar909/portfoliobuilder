@@ -4,6 +4,7 @@ import type React from "react"
 
 import { HeroSection } from "@/components/portfolio/hero-section"
 import HeroTemplateSelector from "@/components/portfolio/HeroTemplateSelector"
+import { useTheme } from "@/components/theme-provider"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -34,6 +35,32 @@ export function HeroForm({ portfolio }: HeroFormProps) {
   const [heroImage, setHeroImage] = useState(portfolio.heroImage || "")
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [heroTemplate, setHeroTemplate] = useState<"hero1" | "hero2" | "hero3">((portfolio as any).heroTemplate || "hero1")
+  const { theme } = useTheme();
+
+  // Add a customizations state for preview colors (copy from theme-form)
+  const [customizations, setCustomizations] = useState({
+    primaryColor: "#2563eb",
+    backgroundColor: "#ffffff",
+    backgroundColorDark: "#18181b",
+    foregroundColor: "#111827",
+    foregroundColorDark: "#f4f4f5",
+    secondaryColor: "#6366f1",
+    secondaryColorDark: "#818cf8",
+    buttonColor: "#2563eb",
+    buttonColorDark: "#3b82f6",
+    buttonTextColor: "#ffffff",
+    buttonTextColorDark: "#f4f4f5",
+    cardBackgroundColor: "#f3f4f6",
+    cardBackgroundColorDark: "#27272a",
+    linkColor: "#2563eb",
+    linkColorDark: "#818cf8",
+    navbarColor: "#ffffff",
+    navbarColorDark: "#18181b",
+    footerColor: "#f9fafb",
+    footerColorDark: "#27272a",
+    borderRadius: "0.5rem",
+    fontFamily: "Inter",
+  });
 
   // Always set heroType to 'image' and hide the select
   useEffect(() => {
@@ -168,9 +195,8 @@ export function HeroForm({ portfolio }: HeroFormProps) {
                   <Image src={heroImage || "/placeholder.svg"} alt="Hero image preview" fill className="object-cover" />
                   <Button
                     type="button"
-                    variant="destructive"
                     size="icon"
-                    className="absolute right-2 top-2"
+                    className="absolute right-2 top-2 bg-red-700 hover:bg-red-800 dark:text-white"
                     onClick={() => {
                       setHeroImage("")
                       setImageFile(null)
@@ -215,12 +241,29 @@ export function HeroForm({ portfolio }: HeroFormProps) {
       <div className="mt-8 space-y-6">
         <div className="space-y-2">
           <Label>Live Preview</Label>
-          <div className="border rounded-lg bg-muted p-4">
+          <div
+            className="border rounded-lg bg-muted p-4"
+            style={{
+              borderColor: customizations.primaryColor,
+              background: theme === "dark" ? customizations.backgroundColorDark : customizations.backgroundColor,
+            }}
+          >
             <HeroSection
               heroTemplate={heroTemplate}
               title={heroTitle}
               subtitle={heroSubtitle}
               imageUrl={heroImage}
+              primaryColor={customizations.primaryColor}
+              backgroundColor={customizations.backgroundColor}
+              backgroundColorDark={customizations.backgroundColorDark}
+              foregroundColor={customizations.foregroundColor}
+              foregroundColorDark={customizations.foregroundColorDark}
+              secondaryColor={customizations.secondaryColor}
+              secondaryColorDark={customizations.secondaryColorDark}
+              buttonColor={customizations.buttonColor}
+              buttonColorDark={customizations.buttonColorDark}
+              buttonTextColor={customizations.buttonTextColor}
+              buttonTextColorDark={customizations.buttonTextColorDark}
             />
           </div>
         </div>

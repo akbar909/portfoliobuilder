@@ -1,13 +1,41 @@
 "use client"
 
+import { useTheme } from "@/components/theme-provider"
 import { Button } from "@/components/ui/button"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { ThemeToggleNavbar } from "@/components/ui/Theme-Toggle-Navbar"
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 
-export function PortfolioNavbar({ username }: { username: string }) {
+interface PortfolioNavbarProps {
+  username: string
+  primaryColor: string
+  backgroundColor: string
+  backgroundColorDark: string
+  foregroundColor: string
+  foregroundColorDark: string
+  secondaryColor?: string
+  secondaryColorDark?: string 
+  linkColor: string
+  linkColorDark: string
+}
+
+export function PortfolioNavbar({
+  username,
+  primaryColor,
+  backgroundColor,
+  backgroundColorDark,
+  foregroundColor,
+  foregroundColorDark,
+  secondaryColor,
+  secondaryColorDark,
+  linkColor,
+  linkColorDark,
+}: PortfolioNavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { theme } = useTheme()
+
+  const borderClr = theme === "dark" ? linkColorDark : linkColor
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -22,7 +50,10 @@ export function PortfolioNavbar({ username }: { username: string }) {
   }
 
   return (
-    <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
+    <nav
+      className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur"
+      style={{ backgroundColor: theme === "dark" ? backgroundColorDark : backgroundColor, color: theme === "dark" ? foregroundColorDark : foregroundColor, borderColor: borderClr }}
+    >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <div className="flex items-center">
           <Link href="/" className="text-xl font-bold">
@@ -50,12 +81,12 @@ export function PortfolioNavbar({ username }: { username: string }) {
           <button onClick={() => scrollToSection("contact")} className="text-sm hover:text-primary">
             Contact
           </button>
-          <ThemeToggle />
+          <ThemeToggleNavbar />
         </div>
 
         {/* Mobile Navigation Toggle */}
         <div className="flex items-center gap-2 md:hidden">
-          <ThemeToggle />
+          <ThemeToggleNavbar />
           <Button variant="ghost" size="icon" onClick={toggleMenu}>
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
@@ -64,7 +95,7 @@ export function PortfolioNavbar({ username }: { username: string }) {
 
       {/* Mobile Navigation Menu */}
       {isMenuOpen && (
-        <div className="border-t px-4 py-3 md:hidden">
+        <div className="border-t px-4 py-3 md:hidden" style={{ borderColor: borderClr }}>
           <div className="flex flex-col space-y-3">
             <button onClick={() => scrollToSection("home")} className="text-left text-sm">
               Home
