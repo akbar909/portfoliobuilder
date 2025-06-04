@@ -1,11 +1,11 @@
-import connectDB from "@/lib/db"
-import Portfolio from "@/models/Portfolio"
-import User from "@/models/User"
-import { NextResponse } from "next/server"
+import connectDB from "@/lib/db";
+import Portfolio from "@/models/Portfolio";
+import User from "@/models/User";
+import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
   try {
-    const { username } = params
+    const { username } = await params;
 
     await connectDB()
 

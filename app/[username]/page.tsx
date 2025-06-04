@@ -14,8 +14,9 @@ interface PortfolioPageProps {
 }
 
 export default async function PortfolioPage({ params }: PortfolioPageProps) {
+  const { username } = await params;
   // Fetch from your API route
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/portfolio/${params.username}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/portfolio/${username}`, {
     cache: "no-store"
   });
 
