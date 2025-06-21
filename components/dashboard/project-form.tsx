@@ -233,7 +233,7 @@ export function ProjectForm({ projects: initialProjects }: ProjectFormProps) {
           <DialogTrigger asChild>
             <Button onClick={resetForm}>Add Project</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
+          <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
             <form onSubmit={handleSubmit}>
               <DialogHeader>
                 <DialogTitle>{isEditing ? "Edit Project" : "Add New Project"}</DialogTitle>

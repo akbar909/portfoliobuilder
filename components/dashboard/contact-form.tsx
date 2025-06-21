@@ -84,7 +84,7 @@ export function ContactForm({ portfolio }: ContactFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="container mx-auto max-w-2xl">
       <Card>
         <CardHeader>
           <CardTitle>Contact Information</CardTitle>

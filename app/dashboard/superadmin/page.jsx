@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -115,6 +116,9 @@ export default function SuperadminDashboard() {
   const [editUser, setEditUser] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 6;
+  const totalPages = Math.ceil(users.length / usersPerPage);
 
   const fetchUsers = () => {
     setLoading(true);
@@ -175,12 +179,17 @@ export default function SuperadminDashboard() {
     setActionLoading(false);
   };
 
+  const paginatedUsers = users.slice(
+    (currentPage - 1) * usersPerPage,
+    currentPage * usersPerPage
+  );
+
   if (loading) return <div className="p-8 text-center">Loading...</div>;
   if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-8">
-      <h1 className="text-3xl font-bold mb-6">Superadmin Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Superadmin Dashboard</h1>
       <div className="overflow-x-auto">
         <table className="min-w-full border rounded-lg bg-card shadow-sm">
           <thead>
@@ -195,7 +204,7 @@ export default function SuperadminDashboard() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {paginatedUsers.map((user) => (
               <tr key={user._id} className="border-b hover:bg-muted/50">
                 <td className="p-3">{user.name}</td>
                 <td className="p-3">{user.username}</td>
@@ -205,26 +214,8 @@ export default function SuperadminDashboard() {
                   {user.verified ? (
                     <span className="text-green-600 font-semibold">Yes</span>
                   ) : (
-                    <span className="text-red-600 ">No</span>
+                    <span className="text-red-600">No</span>
                   )}
-                  {/* <Button
-                    size="sm"
-                    variant={user.verified ? "destructive" : "default"}
-                    className="ml-2"
-                    onClick={async () => {
-                      setActionLoading(true);
-                      await fetch("/api/users", {
-                        method: "PUT",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ userId: user._id, verified: !user.verified }),
-                      });
-                      fetchUsers();
-                      setActionLoading(false);
-                    }}
-                    disabled={actionLoading}
-                  >
-                    {user.verified ? "Unverify" : "Verify"}
-                  </Button> */}
                 </td>
                 <td className="p-3">
                   {user.portfolio ? (
@@ -236,15 +227,43 @@ export default function SuperadminDashboard() {
                 <td className="p-3 flex gap-2">
                   <Button size="sm" variant="outline" onClick={() => handleEdit(user)} disabled={actionLoading}>Edit</Button>
                   {user.role !== "superadmin" && (
-                    <Button size="sm" variant="destructive" onClick={() => handleDelete(user._id)} disabled={actionLoading}>Delete</Button>
+                    <Button size="sm" className="bg-red-700 hover:bg-red-800 dark:text-white" onClick={() => handleDelete(user._id)} disabled={actionLoading}>Delete</Button>
                   )}
-                  <Button size="sm" onClick={() => router.push(`/${user.username}`)} disabled={actionLoading}>View Portfolio</Button>
+                  <Button size="sm" onClick={() => window.open(`/${user.username}`, '_blank')} disabled={actionLoading}>View Portfolio</Button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      <Pagination className="mt-4">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+            className="cursor-pointer"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            />
+          </PaginationItem>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <PaginationItem key={index}>
+              <PaginationLink className="cursor-pointer"
+                isActive={currentPage === index + 1}
+                onClick={() => setCurrentPage(index + 1)}
+              >
+                {index + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+          <PaginationItem>
+            <PaginationNext
+            className="cursor-pointer"
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
       <EditUserModal
         user={editUser}
         open={editOpen}
@@ -253,4 +272,4 @@ export default function SuperadminDashboard() {
       />
     </div>
   );
-} 
+}

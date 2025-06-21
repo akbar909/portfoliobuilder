@@ -82,6 +82,7 @@ export default function Home() {
       {/* Google Ad Section Start */}
       <section className="w-full flex justify-center py-6">
         <div className="w-full max-w-2xl bg-muted rounded-lg border border-border shadow-sm flex items-center justify-center min-h-[90px]">
+         <h1>Ad Section</h1>
           <ins
             className="adsbygoogle"
             style={{ display: 'block' }}

@@ -33,14 +33,13 @@ export function EducationSection({
   const fgColor = theme === "dark" ? foregroundColorDark : foregroundColor;
   const avatarBg = theme === "dark" ? `${primaryColor}33` : `${primaryColor}15`;
 
-  if (!education.length) {
-    return <p className="text-center text-muted-foreground" style={{ color: fgColor }}>No education added yet.</p>;
-  }
-
   return (
     <section id="education" className="mb-12 pt-16 -mt-16" style={{ backgroundColor: bgColor, color: fgColor }}>
       <div className="container py-12">
         <h2 className="mb-8 text-2xl font-bold" style={{ color: fgColor }}>Education</h2>
+        {education.length === 0 && (
+          <p className="text-center text-muted-foreground" style={{ color: fgColor }}>No education added yet.</p>
+        )}
         <div
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
         >

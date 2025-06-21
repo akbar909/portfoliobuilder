@@ -143,7 +143,8 @@ export function HeroForm({ portfolio }: HeroFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+  <div >
+    <form onSubmit={handleSubmit} className="container mx-auto max-w-2xl">
       <Card>
         <CardHeader>
           <CardTitle>Hero Section</CardTitle>
@@ -238,11 +239,12 @@ export function HeroForm({ portfolio }: HeroFormProps) {
           </div>
         </CardFooter>
       </Card>
+    </form>
       <div className="mt-8 space-y-6">
         <div className="space-y-2">
           <Label>Live Preview</Label>
           <div
-            className="border rounded-lg bg-muted p-4"
+            className="border rounded-lg mx-auto bg-muted p-4"
             style={{
               borderColor: customizations.primaryColor,
               background: theme === "dark" ? customizations.backgroundColorDark : customizations.backgroundColor,
@@ -268,6 +270,6 @@ export function HeroForm({ portfolio }: HeroFormProps) {
           </div>
         </div>
       </div>
-    </form>
+      </div>
   )
 }

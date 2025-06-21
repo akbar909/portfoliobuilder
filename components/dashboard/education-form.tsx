@@ -122,8 +122,8 @@ export function EducationForm({ educationList }: EducationFormProps) {
   };
 
   return (
-    <div className="space-y-6 mx-auto max-w-2xl">
-      <form onSubmit={handleSubmit}>
+    <div className="space-y-6" >
+      <form onSubmit={handleSubmit} className=" mx-auto max-w-2xl">
         <Card>
           <CardHeader>
             <CardTitle>{isEditing ? "Edit Education" : "Add Education"}</CardTitle>
@@ -172,7 +172,7 @@ export function EducationForm({ educationList }: EducationFormProps) {
                         : "Pick a date"}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent align="start" className="w-auto p-0">
+                  <PopoverContent align="start" className="w-auto p-0 bg-background">
                     <Calendar
                       mode="single"
                       selected={currentEducation.startDate ? parseISO(currentEducation.startDate) : undefined}
@@ -204,7 +204,7 @@ export function EducationForm({ educationList }: EducationFormProps) {
                         : "Pick a date"}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent align="start" className="w-auto p-0">
+                  <PopoverContent align="start" className="w-auto p-0 bg-background">
                     <Calendar
                       mode="single"
                       selected={currentEducation.endDate ? parseISO(currentEducation.endDate) : undefined}
@@ -259,7 +259,7 @@ export function EducationForm({ educationList }: EducationFormProps) {
       </form>
       <div>
         <h3 className="text-xl font-semibold mb-4">Your Education</h3>
-        <ul className="space-y-4">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
           {education.length === 0 && <li className="text-muted-foreground">No education entries yet.</li>}
           {education.map((edu) => (
             <li key={edu._id || `${edu.degree}-${edu.institution}`}

@@ -156,7 +156,7 @@ export function ExperienceForm({ experiences: initialExperiences }: ExperienceFo
   }
   return (
     <div className="space-y-6 mx-auto">
-      <form onSubmit={handleSubmit} ref={formRef}>
+      <form onSubmit={handleSubmit} ref={formRef} className="container mx-auto max-w-2xl ">
         <Card>
           <CardHeader>
             <h2 className="text-2xl font-semibold">Experience Section</h2>
@@ -188,7 +188,7 @@ export function ExperienceForm({ experiences: initialExperiences }: ExperienceFo
             </div>
             <div>
               <Label>Start Date</Label>
-              <Popover>
+              <Popover >
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -203,7 +203,7 @@ export function ExperienceForm({ experiences: initialExperiences }: ExperienceFo
                       : "Pick a date"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent align="start" className="w-auto p-0">
+                <PopoverContent align="start" className="w-auto p-0 bg-background">
                   <Calendar
                     mode="single"
                     selected={currentExperience.startDate ? parseISO(currentExperience.startDate) : undefined}
@@ -214,7 +214,7 @@ export function ExperienceForm({ experiences: initialExperiences }: ExperienceFo
                       }));
                     }}
                     initialFocus
-                    captionLayout="dropdown"
+                    captionLayout="dropdown" // Enables quick selection of month and year
                   />
                 </PopoverContent>
               </Popover>
@@ -236,7 +236,7 @@ export function ExperienceForm({ experiences: initialExperiences }: ExperienceFo
                       : "Pick a date"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent align="start" className="w-auto p-0">
+                <PopoverContent align="start" className="w-auto p-0 bg-background">
                   <Calendar
                     mode="single"
                     selected={currentExperience.endDate ? parseISO(currentExperience.endDate) : undefined}

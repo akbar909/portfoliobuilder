@@ -33,14 +33,13 @@ export function ExperienceSection({
   const fgColor = theme === "dark" ? foregroundColorDark : foregroundColor;
   const avatarBg = theme === "dark" ? `${primaryColor}33` : `${primaryColor}15`;
 
-  if (!experiences.length) {
-    return <p className="text-center text-muted-foreground" style={{ color: fgColor }}>No experiences added yet.</p>;
-  }
-
   return (
     <section id="experience" className="mb-12 pt-16 -mt-16" style={{ backgroundColor: bgColor, color: fgColor }}>
       <div className="container py-12">
         <h2 className="mb-8 text-2xl font-bold" style={{ color: fgColor }}>Experience</h2>
+        {experiences.length === 0 && (
+          <p className="text-center text-muted-foreground" style={{ color: fgColor }}>No experiences added yet.</p>
+        )}
         <div
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
         >
