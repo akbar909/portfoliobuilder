@@ -144,7 +144,7 @@ export function HeroForm({ portfolio }: HeroFormProps) {
 
   return (
   <div >
-    <form onSubmit={handleSubmit} className="container mx-auto max-w-2xl">
+    <form onSubmit={handleSubmit} className=" mx-auto max-w-2xl">
       <Card>
         <CardHeader>
           <CardTitle>Hero Section</CardTitle>

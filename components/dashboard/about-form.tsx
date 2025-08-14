@@ -170,7 +170,7 @@ export function AboutForm({ portfolio }: AboutFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="container mx-auto max-w-2xl">
+    <form onSubmit={handleSubmit} className=" mx-auto max-w-2xl">
       <Card>
         <CardHeader>
           <h2 className="text-2xl font-semibold">About Section</h2>

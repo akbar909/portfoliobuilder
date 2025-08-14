@@ -23,15 +23,6 @@ export default function SignIn() {
   })
   const [showPassword, setShowPassword] = useState(false)
 
-  useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/dashboard")
-    }
-  }, [status, router])
-
-  // if (status === "authenticated") {
-  //   return null
-  // }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target

@@ -68,9 +68,9 @@ export default function Navbar() {
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full bg-primary p-0">
                     <span className="sr-only">Open user menu</span>
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user?.image || undefined} alt={session?.user?.name || "User"} />
-                      <AvatarFallback>{session?.user?.name?.[0] || "U"}</AvatarFallback>
-                    </Avatar>
+  <AvatarImage src={user?.image || undefined} alt={user?.name || "User"} />
+  <AvatarFallback>{user?.name?.[0] || "U"}</AvatarFallback>
+</Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">

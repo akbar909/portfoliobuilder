@@ -14,7 +14,7 @@ export default async function SettingsPage() {
 
   await connectDB();
 
-  const user = await User.findById(session.user.id).lean(); // Convert to plain object
+  const user = await User.findById(session.user.id).lean();
 
   if (!user) {
     redirect("/dashboard");

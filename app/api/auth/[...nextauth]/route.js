@@ -54,14 +54,27 @@ export const authOptions = {
       return token
     },
     async session({ session, token }) {
-      if (token) {
-        session.user.id = token.id
-        session.user.name = token.name
-        session.user.username = token.username
-        session.user.role = token.role
-        session.user.image = token.image
+      // Always fetch the latest user data from the database for up-to-date session
+      if (token?.id) {
+        await connectDB();
+        const user = await User.findById(token.id).lean();
+        if (user) {
+          session.user.id = user._id.toString();
+          session.user.name = user.name;
+          session.user.username = user.username;
+          session.user.role = user.role;
+          session.user.image = user.image;
+          session.user.email = user.email;
+        } else {
+          // fallback to token if user not found
+          session.user.id = token.id;
+          session.user.name = token.name;
+          session.user.username = token.username;
+          session.user.role = token.role;
+          session.user.image = token.image;
+        }
       }
-      return session
+      return session;
     },
   },
   pages: {

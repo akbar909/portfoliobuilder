@@ -156,7 +156,7 @@ export function ExperienceForm({ experiences: initialExperiences }: ExperienceFo
   }
   return (
     <div className="space-y-6 mx-auto">
-      <form onSubmit={handleSubmit} ref={formRef} className="container mx-auto max-w-2xl ">
+      <form onSubmit={handleSubmit} ref={formRef} className=" mx-auto max-w-2xl ">
         <Card>
           <CardHeader>
             <h2 className="text-2xl font-semibold">Experience Section</h2>

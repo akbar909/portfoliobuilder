@@ -111,7 +111,7 @@ export default function SettingsForm({ user }: { user: any }) {
             <img src={profileImage} alt="Profile" className="object-cover rounded-full w-full h-full" />
           </div>
         )}
-        <Input id="profileImage" name="profileImage" type="file" accept="image/*" onChange={handleImageChange} />
+        <Input id="profileImage" name="profileImage" type="file" accept="image/*" className="cursor-pointer" onChange={handleImageChange} />
       </div>
 
       <Button type="submit" disabled={isSaving}>{isSaving ? "Saving..." : "Save Changes"}</Button>
