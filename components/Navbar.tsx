@@ -31,7 +31,6 @@ export default function Navbar() {
 
   const isDashboard = pathname.startsWith("/dashboard")
 
-  // Check if we're on a portfolio page (username route)
   const isPortfolioPage = /^\/[^/]+$/.test(pathname) && pathname !== "/"
 
   // Don't show this navbar on portfolio pages or dashboard pages
