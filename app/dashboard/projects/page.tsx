@@ -1,11 +1,11 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { HeroForm } from "@/components/dashboard/hero-form"
+import { ProjectForm } from "@/components/dashboard/project-form"
 import connectDB from "@/lib/db"
 import Portfolio from "@/models/Portfolio"
 import { getServerSession } from "next-auth/next"
 import { redirect } from "next/navigation"
 
-export default async function HeroPage() {
+export default async function ProjectsPage() {
     const session = await getServerSession(authOptions)
 
     if (!session) {
@@ -24,12 +24,12 @@ export default async function HeroPage() {
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-xl font-bold tracking-tight md:text-2xl">Hero Section</h1>
+                <h1 className="text-xl font-bold tracking-tight md:text-2xl">Projects</h1>
                 <p className="text-muted-foreground">
-                    Customize how the hero section of your portfolio appears to visitors.
+                    Showcase your best work and achievements.
                 </p>
             </div>
-            <HeroForm portfolio={portfolioData} />
+            <ProjectForm projects={portfolioData.projects || []} />
         </div>
     )
 }

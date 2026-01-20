@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata = {
   title: "Portfolio Builder",
   description: "Build your professional portfolio with ease",
-    generator: 'v0.dev'
+  generator: 'v0.dev'
 }
 
 export default async function RootLayout({
@@ -33,7 +33,12 @@ export default async function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        <ThemeProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
           <SessionProvider session={session}>
             <ClientLayout>{children}</ClientLayout>
             <Toaster />
@@ -45,3 +50,4 @@ export default async function RootLayout({
 }
 
 import './globals.css'
+

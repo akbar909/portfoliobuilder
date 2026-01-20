@@ -1,5 +1,4 @@
 "use client"
-import { useTheme } from "@/components/theme-provider";
 import { MapPin } from "lucide-react";
 import Image from "next/image";
 
@@ -39,31 +38,38 @@ export function AboutSection({
   secondaryColor,
   secondaryColorDark,
 }: AboutSectionProps) {
-  const { theme } = useTheme();
-  const avatarBg = theme === "dark" ? `${primaryColor}33` : `${primaryColor}15`;
+
+  // CSS variables for theme-aware styling (no JS theme detection needed)
+  const cssVars = {
+    '--about-bg': backgroundColor,
+    '--about-bg-dark': backgroundColorDark,
+    '--about-fg': foregroundColor,
+    '--about-fg-dark': foregroundColorDark,
+    '--about-card-bg': 'var(--card-background)',
+    '--about-card-bg-dark': 'var(--card-background-dark)',
+    '--about-avatar-bg': `${primaryColor}15`,
+    '--about-avatar-bg-dark': `${primaryColor}33`,
+    '--about-primary': primaryColor,
+  } as React.CSSProperties;
 
   return (
     <section
       id="about"
-      className="mb-12 pt-16 -mt-16"
-      style={{ backgroundColor: theme === "dark" ? backgroundColorDark : backgroundColor, color: theme === "dark" ? foregroundColorDark : foregroundColor }}
+      className="mb-12 pt-16 -mt-16 bg-[var(--about-bg)] text-[var(--about-fg)] dark:bg-[var(--about-bg-dark)] dark:text-[var(--about-fg-dark)]"
+      style={cssVars}
     >
       <div className="container py-12">
-        <h2 className="mb-8 text-2xl font-bold" style={{ color: theme === "dark" ? "var(--foreground-dark)" : "var(--foreground)" }}>About Me</h2>
+        <h2 className="mb-8 text-2xl font-bold">About Me</h2>
         <div
-          className="relative mx-auto max-w-4xl rounded-2xl shadow-xl p-6 md:p-10 backdrop-blur-md border border-border"
-          style={{
-            backgroundColor: theme === "dark" ? "var(--card-background-dark)" : "var(--card-background)",
-            color: theme === "dark" ? "var(--foreground-dark)" : "var(--foreground)",
-          }}
+          className="relative mx-auto max-w-4xl rounded-2xl shadow-xl p-6 md:p-10 backdrop-blur-md border border-border bg-[var(--about-card-bg)] dark:bg-[var(--about-card-bg-dark)]"
         >
           {/* Profile & Info */}
           <div className="flex flex-col items-center gap-10 md:flex-row md:items-center">
             {/* Profile Image */}
             {aboutProfileImage && (
               <div
-                className="relative h-40 w-40 md:h-56 md:w-56 rounded-full border-4 shadow-lg transition-transform duration-300 hover:scale-105"
-                style={{ borderColor: primaryColor }}
+                className="relative h-40 w-40 md:h-56 md:w-56 rounded-full shadow-lg transition-transform duration-300 hover:scale-105"
+                style={{ borderWidth: '4px', borderStyle: 'solid', borderColor: primaryColor }}
               >
                 <Image
                   src={aboutProfileImage || "/placeholder.svg"}
@@ -77,7 +83,7 @@ export function AboutSection({
             {/* Text Content */}
             <div className="flex-1 space-y-4 text-center md:text-left">
               {aboutTitle && (
-                <h3 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-1" style={{ color: theme === "dark" ? "var(--foreground-dark)" : "var(--foreground)" }}>
+                <h3 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-1">
                   {aboutTitle}
                 </h3>
               )}
@@ -92,12 +98,12 @@ export function AboutSection({
                 </div>
               )}
 
-              <p className="max-w-2xl mx-auto md:mx-0 text-lg leading-relaxed text-muted-foreground" style={{ color: theme === "dark" ? "var(--foreground-dark)" : "var(--foreground)" }}>
+              <p className="max-w-2xl mx-auto md:mx-0 text-lg leading-relaxed text-muted-foreground">
                 {aboutDescription}
               </p>
 
               {aboutBio && (
-                <p className="max-w-2xl mx-auto md:mx-0 text-base leading-relaxed" style={{ color: theme === "dark" ? "var(--foreground-dark)" : "var(--foreground)" }}>
+                <p className="max-w-2xl mx-auto md:mx-0 text-base leading-relaxed">
                   {aboutBio}
                 </p>
               )}
@@ -107,7 +113,7 @@ export function AboutSection({
           {/* Skills Section */}
           {skills && skills.length > 0 && (
             <div className="mt-10 space-y-4">
-              <h3 className="text-2xl font-bold text-center md:text-left" style={{ color: theme === "dark" ? "var(--foreground-dark)" : "var(--foreground)" }}>Skills</h3>
+              <h3 className="text-2xl font-bold text-center md:text-left">Skills</h3>
               <div className="flex flex-wrap justify-center md:justify-start gap-3">
                 {skills.map((skill, index) => (
                   <div

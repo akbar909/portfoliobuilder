@@ -1,11 +1,11 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { HeroForm } from "@/components/dashboard/hero-form"
+import SettingsForm from "@/components/dashboard/SettingsForm"
 import connectDB from "@/lib/db"
-import Portfolio from "@/models/Portfolio"
+import User from "@/models/User"
 import { getServerSession } from "next-auth/next"
 import { redirect } from "next/navigation"
 
-export default async function HeroPage() {
+export default async function SettingsPage() {
     const session = await getServerSession(authOptions)
 
     if (!session) {
@@ -13,23 +13,23 @@ export default async function HeroPage() {
     }
 
     await connectDB()
-    const portfolio = await Portfolio.findOne({ user: session.user.id })
+    const user = await User.findById(session.user.id).lean()
 
-    if (!portfolio) {
+    if (!user) {
         redirect("/dashboard")
     }
 
-    const portfolioData = JSON.parse(JSON.stringify(portfolio))
+    const plainUser = JSON.parse(JSON.stringify(user))
 
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-xl font-bold tracking-tight md:text-2xl">Hero Section</h1>
+                <h1 className="text-xl font-bold tracking-tight md:text-2xl">Settings</h1>
                 <p className="text-muted-foreground">
-                    Customize how the hero section of your portfolio appears to visitors.
+                    Manage your account settings and preferences.
                 </p>
             </div>
-            <HeroForm portfolio={portfolioData} />
+            <SettingsForm user={plainUser} />
         </div>
     )
 }

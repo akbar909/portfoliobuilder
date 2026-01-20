@@ -1,10 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { signIn, useSession } from "next-auth/react";
+import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -82,39 +84,65 @@ export default function SettingsForm({ user }: { user: any }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <Label htmlFor="name">Name</Label>
-        <Input
-          id="name"
-          name="name"
-          defaultValue={user.name}
-          placeholder="Enter your name"
-        />
-      </div>
-
-      <div>
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          defaultValue={user.email}
-          placeholder="Enter your email"
-        />
-      </div>
-
-      <div>
-        <Label htmlFor="profileImage">Profile Image</Label>
-        {profileImage && (
-          <div className="relative w-24 h-24 my-2">
-            <img src={profileImage} alt="Profile" className="object-cover rounded-full w-full h-full" />
+    <form onSubmit={handleSubmit} className="mx-auto max-w-2xl">
+      <Card>
+        <CardHeader>
+          <h2 className="text-2xl font-semibold">Account Settings</h2>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Name */}
+          <div>
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              name="name"
+              defaultValue={user.name}
+              placeholder="Enter your name"
+            />
           </div>
-        )}
-        <Input id="profileImage" name="profileImage" type="file" accept="image/*" className="cursor-pointer" onChange={handleImageChange} />
-      </div>
 
-      <Button type="submit" disabled={isSaving}>{isSaving ? "Saving..." : "Save Changes"}</Button>
+          {/* Email */}
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              defaultValue={user.email}
+              placeholder="Enter your email"
+            />
+          </div>
+
+          {/* Profile Image */}
+          <div>
+            <Label htmlFor="profileImage">Profile Image</Label>
+            {profileImage && (
+              <div className="relative w-32 h-32 my-2">
+                <Image
+                  src={profileImage}
+                  alt="Profile"
+                  fill
+                  className="object-cover rounded-full"
+                />
+              </div>
+            )}
+            <Input
+              id="profileImage"
+              name="profileImage"
+              type="file"
+              accept="image/*"
+              className="cursor-pointer"
+              onChange={handleImageChange}
+            />
+          </div>
+        </CardContent>
+
+        <CardFooter>
+          <Button type="submit" disabled={isSaving}>
+            {isSaving ? "Saving..." : "Save Changes"}
+          </Button>
+        </CardFooter>
+      </Card>
     </form>
   );
 }

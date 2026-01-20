@@ -1,5 +1,4 @@
 "use client"
-import { useTheme } from "@/components/theme-provider"
 import placeholderImage from "@/public/project.jpg"
 import { ExternalLink, Github } from "lucide-react"
 import Image from "next/image"
@@ -28,11 +27,31 @@ interface ProjectSectionProps {
   linkColorDark: string;
 }
 
-export function ProjectSection({ projects, primaryColor, backgroundColor, backgroundColorDark, foregroundColor, foregroundColorDark, linkColor, linkColorDark }: ProjectSectionProps) {
-  const { theme } = useTheme();
-  const bgColor = theme === "dark" ? backgroundColorDark : backgroundColor;
-  const fgColor = theme === "dark" ? foregroundColorDark : foregroundColor;
-  const linkFg = theme === "dark" ? linkColorDark : linkColor;
+export function ProjectSection({
+  projects,
+  primaryColor,
+  backgroundColor,
+  backgroundColorDark,
+  foregroundColor,
+  foregroundColorDark,
+  linkColor,
+  linkColorDark
+}: ProjectSectionProps) {
+
+  // CSS variables for theme-aware styling (no JS theme detection needed)
+  const cssVars = {
+    '--proj-bg': backgroundColor,
+    '--proj-bg-dark': backgroundColorDark,
+    '--proj-fg': foregroundColor,
+    '--proj-fg-dark': foregroundColorDark,
+    '--proj-link': linkColor,
+    '--proj-link-dark': linkColorDark,
+    '--proj-card-bg': 'var(--card-background)',
+    '--proj-card-bg-dark': 'var(--card-background-dark)',
+    '--proj-tag-bg': `${primaryColor}15`,
+    '--proj-tag-bg-dark': `${primaryColor}33`,
+    '--proj-primary': primaryColor,
+  } as React.CSSProperties;
 
   // 1. Featured Development Projects
   const featuredDevProjects = projects.filter(
@@ -48,19 +67,20 @@ export function ProjectSection({ projects, primaryColor, backgroundColor, backgr
   )
 
   return (
-    <section id="projects"
-      className="mb-12 pt-16 -mt-16"
-      style={{ backgroundColor: bgColor, color: fgColor }}
+    <section
+      id="projects"
+      className="mb-12 pt-16 -mt-16 bg-[var(--proj-bg)] text-[var(--proj-fg)] dark:bg-[var(--proj-bg-dark)] dark:text-[var(--proj-fg-dark)]"
+      style={cssVars}
     >
       <div className="container py-12">
-        <h2 className="mb-8 text-2xl font-bold" style={{ color: fgColor }}>Projects</h2>
+        <h2 className="mb-8 text-2xl font-bold">Projects</h2>
         {/* Featured Development Projects */}
         {featuredDevProjects.length > 0 && (
           <div className="space-y-8">
-            <h3 className="text-xl font-semibold" style={{ color: fgColor }}>Featured Development Projects</h3>
+            <h3 className="text-xl font-semibold">Featured Development Projects</h3>
             <div className="grid gap-8 md:gap-12 md:grid-cols-2 lg:grid-cols-3">
               {featuredDevProjects.map((project) => (
-                <FeaturedProjectCard key={project._id} project={project} primaryColor={primaryColor} fgColor={fgColor} linkColor={linkFg} />
+                <FeaturedProjectCard key={project._id} project={project} primaryColor={primaryColor} />
               ))}
             </div>
           </div>
@@ -68,10 +88,10 @@ export function ProjectSection({ projects, primaryColor, backgroundColor, backgr
         {/* Other Development Projects */}
         {otherDevProjects.length > 0 && (
           <div className="space-y-8">
-            <h3 className="text-xl font-semibold" style={{ color: fgColor }}>Development Projects</h3>
+            <h3 className="text-xl font-semibold">Development Projects</h3>
             <div className="grid gap-8 md:gap-12 md:grid-cols-2 lg:grid-cols-3">
               {otherDevProjects.map((project) => (
-                <ProjectCard key={project._id} project={project} primaryColor={primaryColor} fgColor={fgColor} linkColor={linkFg} />
+                <ProjectCard key={project._id} project={project} primaryColor={primaryColor} />
               ))}
             </div>
           </div>
@@ -79,16 +99,16 @@ export function ProjectSection({ projects, primaryColor, backgroundColor, backgr
         {/* Design & Other Projects */}
         {designOtherProjects.length > 0 && (
           <div className="space-y-8">
-            <h3 className="text-xl font-semibold" style={{ color: fgColor }}>Design & Other Projects</h3>
+            <h3 className="text-xl font-semibold">Design & Other Projects</h3>
             <div className="grid gap-8 md:gap-12 md:grid-cols-2 lg:grid-cols-3">
               {designOtherProjects.map((project) => (
-                <ProjectCard key={project._id} project={project} primaryColor={primaryColor} fgColor={fgColor} linkColor={linkFg} />
+                <ProjectCard key={project._id} project={project} primaryColor={primaryColor} />
               ))}
             </div>
           </div>
         )}
         {featuredDevProjects.length === 0 && otherDevProjects.length === 0 && designOtherProjects.length === 0 && (
-          <p className="text-center text-muted-foreground" style={{ color: fgColor }}>No projects added yet.</p>
+          <p className="text-center text-muted-foreground">No projects added yet.</p>
         )}
       </div>
     </section>
@@ -98,30 +118,20 @@ export function ProjectSection({ projects, primaryColor, backgroundColor, backgr
 interface ProjectCardProps {
   project: Project
   primaryColor: string
-  fgColor: string
-  linkColor: string
 }
 
-function FeaturedProjectCard({ project, primaryColor, fgColor, linkColor }: ProjectCardProps) {
+function FeaturedProjectCard({ project, primaryColor }: ProjectCardProps) {
   const isDev = project.type === "development"
-  const { theme } = useTheme();
-  const tagBg = theme === "dark" ? `${primaryColor}33` : `${primaryColor}15`;
-  const typeBg = theme === "dark" ? `${primaryColor}33` : `${primaryColor}15`;
-  const typeColor = primaryColor;
 
   return (
     <div
-      className="group overflow-hidden rounded-lg border shadow-sm transition-all hover:shadow-md"
-      style={{
-        backgroundColor: theme === "dark" ? "var(--card-background-dark)" : "var(--card-background)",
-        color: theme === "dark" ? "var(--foreground-dark)" : "var(--foreground)",
-      }}
+      className="group overflow-hidden rounded-lg border shadow-sm transition-all hover:shadow-md bg-[var(--proj-card-bg)] dark:bg-[var(--proj-card-bg-dark)]"
     >
       {project.image && (
         <div className="relative aspect-video w-full overflow-hidden">
           <div
-            className="absolute left-2 top-2 z-10 rounded-full px-2 py-1 text-xs font-medium capitalize"
-            style={{ backgroundColor: typeBg, color: typeColor }}
+            className="absolute left-2 top-2 z-10 rounded-full px-2 py-1 text-xs font-medium capitalize bg-[var(--proj-tag-bg)] dark:bg-[var(--proj-tag-bg-dark)]"
+            style={{ color: primaryColor }}
           >
             {project.type || "development"}
           </div>
@@ -135,19 +145,16 @@ function FeaturedProjectCard({ project, primaryColor, fgColor, linkColor }: Proj
         </div>
       )}
       <div className="p-5">
-        <h3 className="mb-2 text-xl font-bold" style={{ color: theme === "dark" ? "var(--foreground-dark)" : "var(--foreground)" }}>{project.title}</h3>
-        <p className={`text-muted-foreground ${isDev ? "mb-4" : ""}`} style={{ color: theme === "dark" ? "var(--foreground-dark)" : "var(--foreground)" }}>{project.description}</p>
+        <h3 className="mb-2 text-xl font-bold">{project.title}</h3>
+        <p className={`text-muted-foreground ${isDev ? "mb-4" : ""}`}>{project.description}</p>
 
         {isDev && project.technologies.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2">
             {project.technologies.map((tech, index) => (
               <span
                 key={index}
-                className="rounded-full px-3 py-1 text-xs"
-                style={{
-                  backgroundColor: tagBg,
-                  color: primaryColor,
-                }}
+                className="rounded-full px-3 py-1 text-xs bg-[var(--proj-tag-bg)] dark:bg-[var(--proj-tag-bg-dark)]"
+                style={{ color: primaryColor }}
               >
                 {tech}
               </span>
@@ -162,8 +169,7 @@ function FeaturedProjectCard({ project, primaryColor, fgColor, linkColor }: Proj
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm font-medium"
-                style={{ color: linkColor }}
+                className="inline-flex items-center gap-1 text-sm font-medium text-[var(--proj-link)] dark:text-[var(--proj-link-dark)]"
               >
                 Live Demo <ExternalLink className="h-3.5 w-3.5" />
               </Link>
@@ -173,8 +179,7 @@ function FeaturedProjectCard({ project, primaryColor, fgColor, linkColor }: Proj
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm font-medium"
-                style={{ color: linkColor }}
+                className="inline-flex items-center gap-1 text-sm font-medium text-[var(--proj-link)] dark:text-[var(--proj-link-dark)]"
               >
                 GitHub <Github className="h-3.5 w-3.5" />
               </Link>
@@ -186,26 +191,18 @@ function FeaturedProjectCard({ project, primaryColor, fgColor, linkColor }: Proj
   )
 }
 
-function ProjectCard({ project, primaryColor, fgColor, linkColor }: ProjectCardProps) {
+function ProjectCard({ project, primaryColor }: ProjectCardProps) {
   const isDev = project.type === "development"
-  const { theme } = useTheme();
-  const tagBg = theme === "dark" ? `${primaryColor}33` : `${primaryColor}15`;
-  const typeBg = theme === "dark" ? `${primaryColor}33` : `${primaryColor}15`;
-  const typeColor = primaryColor;
 
   return (
     <div
-      className="group overflow-hidden rounded-lg border shadow-sm transition-all hover:shadow-md"
-      style={{
-        backgroundColor: theme === "dark" ? "var(--card-background-dark)" : "var(--card-background)",
-        color: theme === "dark" ? "var(--foreground-dark)" : "var(--foreground)",
-      }}
+      className="group overflow-hidden rounded-lg border shadow-sm transition-all hover:shadow-md bg-[var(--proj-card-bg)] dark:bg-[var(--proj-card-bg-dark)]"
     >
       {project.image && (
         <div className="relative aspect-video w-full overflow-hidden">
           <div
-            className="absolute left-2 top-2 z-10 rounded-full px-2 py-1 text-xs font-medium capitalize"
-            style={{ backgroundColor: typeBg, color: typeColor }}
+            className="absolute left-2 top-2 z-10 rounded-full px-2 py-1 text-xs font-medium capitalize bg-[var(--proj-tag-bg)] dark:bg-[var(--proj-tag-bg-dark)]"
+            style={{ color: primaryColor }}
           >
             {project.type || "development"}
           </div>
@@ -218,8 +215,8 @@ function ProjectCard({ project, primaryColor, fgColor, linkColor }: ProjectCardP
         </div>
       )}
       <div className="p-4">
-        <h3 className="mb-1 font-semibold" style={{ color: theme === "dark" ? "var(--foreground-dark)" : "var(--foreground)" }}>{project.title}</h3>
-        <p className={`text-sm text-muted-foreground ${isDev ? "mb-3" : ""}`} style={{ color: theme === "dark" ? "var(--foreground-dark)" : "var(--foreground)" }}>
+        <h3 className="mb-1 font-semibold">{project.title}</h3>
+        <p className={`text-sm text-muted-foreground ${isDev ? "mb-3" : ""}`}>
           {project.description}
         </p>
 
@@ -228,11 +225,8 @@ function ProjectCard({ project, primaryColor, fgColor, linkColor }: ProjectCardP
             {project.technologies.slice(0, 3).map((tech, index) => (
               <span
                 key={index}
-                className="rounded-full px-2 py-0.5 text-xs"
-                style={{
-                  backgroundColor: tagBg,
-                  color: primaryColor,
-                }}
+                className="rounded-full px-2 py-0.5 text-xs bg-[var(--proj-tag-bg)] dark:bg-[var(--proj-tag-bg-dark)]"
+                style={{ color: primaryColor }}
               >
                 {tech}
               </span>
@@ -253,8 +247,7 @@ function ProjectCard({ project, primaryColor, fgColor, linkColor }: ProjectCardP
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted"
-                  style={{ color: linkColor }}
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted text-[var(--proj-link)] dark:text-[var(--proj-link-dark)]"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
                   <span className="sr-only">Live Demo</span>
@@ -265,8 +258,7 @@ function ProjectCard({ project, primaryColor, fgColor, linkColor }: ProjectCardP
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted"
-                  style={{ color: linkColor }}
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted text-[var(--proj-link)] dark:text-[var(--proj-link-dark)]"
                 >
                   <Github className="h-3.5 w-3.5" />
                   <span className="sr-only">GitHub</span>

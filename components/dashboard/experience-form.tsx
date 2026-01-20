@@ -261,7 +261,27 @@ export function ExperienceForm({ experiences: initialExperiences }: ExperienceFo
               />
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="justify-end gap-2">
+            {isEditing && (
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  setCurrentExperience({
+                    title: "",
+                    company: "",
+                    location: "",
+                    startDate: "",
+                    endDate: "",
+                    description: "",
+                  });
+                  setIsEditing(false);
+                }}
+                disabled={isLoading}
+              >
+                Cancel
+              </Button>
+            )}
             <Button type="submit" disabled={isLoading}>
               {isLoading ? "Saving..." : isEditing ? "Update Experience" : "Add Experience"}
             </Button>
@@ -283,7 +303,7 @@ export function ExperienceForm({ experiences: initialExperiences }: ExperienceFo
             <p className="mt-2 text-muted-foreground">{exp.description}</p>
             <div className="mt-2 flex gap-2 flex-wrap">
               <Button
-               
+
                 onClick={() => {
                   if (isEditing && currentExperience._id !== exp._id) {
                     const confirmSwitch = confirm("You have unsaved changes. Do you want to discard and edit another?");
@@ -303,7 +323,7 @@ export function ExperienceForm({ experiences: initialExperiences }: ExperienceFo
               </Button>
 
               <Button
-              className="bg-red-700 hover:bg-red-800 dark:text-white"
+                className="bg-red-700 hover:bg-red-800 dark:text-white"
                 onClick={() => handleDelete(exp._id!)}
               >
                 Delete

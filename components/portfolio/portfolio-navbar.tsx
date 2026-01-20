@@ -1,6 +1,5 @@
 "use client"
 
-import { useTheme } from "@/components/theme-provider"
 import { Button } from "@/components/ui/button"
 import { ThemeToggleNavbar } from "@/components/ui/Theme-Toggle-Navbar"
 import { Menu, X } from "lucide-react"
@@ -15,9 +14,17 @@ interface PortfolioNavbarProps {
   foregroundColor: string
   foregroundColorDark: string
   secondaryColor?: string
-  secondaryColorDark?: string 
+  secondaryColorDark?: string
   linkColor: string
   linkColorDark: string
+}
+
+// Helper to add alpha to hex color
+function hexToRgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
 export function PortfolioNavbar({
@@ -33,9 +40,20 @@ export function PortfolioNavbar({
   linkColorDark,
 }: PortfolioNavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { theme } = useTheme()
 
-  const borderClr = theme === "dark" ? linkColorDark : linkColor
+  // Create semi-transparent versions of background colors
+  const bgWithAlpha = hexToRgba(backgroundColor, 0.95);
+  const bgDarkWithAlpha = hexToRgba(backgroundColorDark, 0.95);
+
+  // CSS variables for theme-aware styling (no JS theme detection needed)
+  const cssVars = {
+    '--nav-bg': bgWithAlpha,
+    '--nav-bg-dark': bgDarkWithAlpha,
+    '--nav-fg': foregroundColor,
+    '--nav-fg-dark': foregroundColorDark,
+    '--nav-border': linkColor + '33',
+    '--nav-border-dark': linkColorDark + '33',
+  } as React.CSSProperties;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -51,8 +69,8 @@ export function PortfolioNavbar({
 
   return (
     <nav
-      className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur"
-      style={{ backgroundColor: theme === "dark" ? backgroundColorDark : backgroundColor, color: theme === "dark" ? foregroundColorDark : foregroundColor, borderColor: borderClr }}
+      className="sticky top-0 z-50 backdrop-blur-md bg-[var(--nav-bg)] text-[var(--nav-fg)] border-b border-[var(--nav-border)] dark:bg-[var(--nav-bg-dark)] dark:text-[var(--nav-fg-dark)] dark:border-[var(--nav-border-dark)]"
+      style={cssVars}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <div className="flex items-center">
@@ -95,7 +113,7 @@ export function PortfolioNavbar({
 
       {/* Mobile Navigation Menu */}
       {isMenuOpen && (
-        <div className="border-t px-4 py-3 md:hidden" style={{ borderColor: borderClr }}>
+        <div className="border-t px-4 py-3 md:hidden border-[var(--nav-border)] dark:border-[var(--nav-border-dark)]">
           <div className="flex flex-col space-y-3">
             <button onClick={() => scrollToSection("home")} className="text-left text-sm">
               Home

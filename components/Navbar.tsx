@@ -14,11 +14,10 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { useCurrentUser } from "@/hooks/useCurrentUser"
 import { Menu, X } from "lucide-react"
-import { signOut } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
-import { useSession } from "next-auth/react";
 
 export default function Navbar() {
   const { user, loading, refetch } = useCurrentUser();
@@ -35,8 +34,8 @@ export default function Navbar() {
   // Check if we're on a portfolio page (username route)
   const isPortfolioPage = /^\/[^/]+$/.test(pathname) && pathname !== "/"
 
-  // Don't show this navbar on portfolio pages
-  if (isPortfolioPage) {
+  // Don't show this navbar on portfolio pages or dashboard pages
+  if (isPortfolioPage || isDashboard) {
     return null
   }
 
@@ -68,9 +67,9 @@ export default function Navbar() {
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full bg-primary p-0">
                     <span className="sr-only">Open user menu</span>
                     <Avatar className="h-8 w-8">
-  <AvatarImage src={user?.image || undefined} alt={user?.name || "User"} />
-  <AvatarFallback>{user?.name?.[0] || "U"}</AvatarFallback>
-</Avatar>
+                      <AvatarImage src={user?.image || undefined} alt={user?.name || "User"} />
+                      <AvatarFallback>{user?.name?.[0] || "U"}</AvatarFallback>
+                    </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">

@@ -252,7 +252,7 @@ export function EducationForm({ educationList }: EducationFormProps) {
               </Button>
             )}
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? (isEditing ? "Updating..." : "Adding...") : isEditing ? "Update" : "Add"}
+              {isLoading ? "Saving..." : isEditing ? "Update Education" : "Add Education"}
             </Button>
           </CardFooter>
         </Card>
@@ -263,19 +263,19 @@ export function EducationForm({ educationList }: EducationFormProps) {
           {education.length === 0 && <li className="text-muted-foreground">No education entries yet.</li>}
           {education.map((edu) => (
             <li key={edu._id || `${edu.degree}-${edu.institution}`}
-                className="flex flex-col md:flex-row md:items-center justify-between gap-2 border rounded-lg p-4 bg-card">
+              className="flex flex-col md:flex-row md:items-center justify-between gap-2 border rounded-lg p-4 bg-card">
               <div>
                 <div className="font-semibold text-lg">{edu.degree}</div>
                 <div className="text-muted-foreground">{edu.institution}</div>
                 <p className="text-sm text-muted-foreground">
-              {new Date(edu.startDate).toLocaleDateString()} -{" "}
-              {edu.endDate ? new Date(edu.endDate).toLocaleDateString() : "Present"}
-            </p>
+                  {new Date(edu.startDate).toLocaleDateString()} -{" "}
+                  {edu.endDate ? new Date(edu.endDate).toLocaleDateString() : "Present"}
+                </p>
                 {edu.location && <div className="text-sm text-muted-foreground">{edu.location}</div>}
                 {edu.description && <div className="mt-2 text-sm">{edu.description}</div>}
               </div>
               <div className="flex gap-2 mt-2 md:mt-0">
-                <Button type="button"  onClick={() => handleEdit(edu)} disabled={isLoading}>
+                <Button type="button" onClick={() => handleEdit(edu)} disabled={isLoading}>
                   Edit
                 </Button>
                 <Button type="button" className="bg-red-700 hover:bg-red-800 dark:text-white" onClick={() => handleDelete(edu._id!)} disabled={isLoading}>
